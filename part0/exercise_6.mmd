@@ -1,0 +1,9 @@
+sequenceDiagram
+    User->>User: Enter new note's content. On submit, re-render notes list
+    User->>Server: POST: https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+    activate Server
+    Server-->>Database: <<create>> Add new note to database
+    activate Database
+    Database-->>Server: Create success
+    deactivate Database
+    deactivate Server

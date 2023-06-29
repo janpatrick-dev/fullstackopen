@@ -1,0 +1,9 @@
+sequenceDiagram
+    User->>Server: POST: https://studies.cs.helsinki.fi/exampleapp/notes/new_note
+    activate Server
+    Server-->>Database: <<create>> Add new note to database
+    activate Database
+    Database-->>Server: Create success
+    deactivate Database
+    Server-->>User: Redirect user to /notes
+    deactivate Server
