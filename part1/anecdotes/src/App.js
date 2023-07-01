@@ -6,6 +6,15 @@ const Button = ({handleClick, text}) => {
   )
 }
 
+const Anecdote = ({anecdote, votes}) => {
+  return (
+    <div>
+      <p>{anecdote}</p>
+      <p>has {votes} votes</p>
+    </div>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -20,10 +29,12 @@ const App = () => {
 
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState(new Uint8Array(anecdotes.length));
-  
+  const [highest, setHighest] = useState(0);
+
   const handleVote = () => {
     const votesCopy = [...votes];
     votesCopy[selected] += 1;
+    setHighest(votesCopy.indexOf(Math.max(...votesCopy)));    
     setVotes(votesCopy);
   }
 
@@ -37,10 +48,13 @@ const App = () => {
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <p>has {votes[selected]} votes</p>
+      <h1>Anecdote of the day</h1>
+      <Anecdote anecdote={anecdotes[selected]} votes={votes[selected]} />
       <Button handleClick={handleVote} text='vote' />
       <Button handleClick={handleNext} text='next anecdote' />
+
+      <h1>Anecdote with most votes</h1>
+      <Anecdote anecdote={anecdotes[highest]} votes={votes[highest]} />
     </div>
   );
 }
