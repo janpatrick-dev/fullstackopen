@@ -8,11 +8,15 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newPerson = {
-      name: newName
-    }
-    setPersons([...persons, newPerson]);
+    const newPerson = { name: newName }
+    const newPersonExists = persons.filter((person) => person.name === newPerson.name).length > 0;
+
     setNewName('');
+    if (newPersonExists) {
+      return alert(`${newPerson.name} is already added to phonebook`);
+    }
+
+    setPersons([...persons, newPerson]);
   }
 
   const handleChange = (e) => {
