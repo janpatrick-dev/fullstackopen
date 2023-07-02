@@ -48,6 +48,17 @@ const App = () => {
       });
   }
 
+  const handleDelete = (e, id) => {
+    const personToDelete = persons.find((person) => person.id === id);
+    if (window.confirm(`Delete ${personToDelete.name}?`)) {
+      personService
+        .remove(id)
+        .then((response) => {
+          setPersons(persons.filter((person) => person.id !== id));
+        })
+    }
+  }
+
   const personsToShow = filter 
     ? persons.filter((person) => person.name.toLowerCase().includes(filter.toLowerCase()))
     : persons;
@@ -76,6 +87,7 @@ const App = () => {
 
       <Persons
         persons={personsToShow}
+        handleDelete={handleDelete}
       />
     </div>
   );
