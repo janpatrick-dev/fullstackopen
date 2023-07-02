@@ -33,19 +33,27 @@ const App = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const newPerson = { name: newName, number: newNumber, id: persons.length + 1 }
-    const newPersonExists = persons.filter((person) => person.name === newPerson.name).length > 0;
+    const existingPerson = persons.find((person) => person.name === newPerson.name);
 
     setNewName('');
     setNewNumber('');
-    if (newPersonExists) {
-      return alert(`${newPerson.name} is already added to phonebook`);
+    if (existingPerson) {
+      const promptText = `${newPerson.name} is already added to phone book, replace the old number with a new one?`;
+      if (window.confirm(promptText)) {
+        personService
+          .update(existingPerson.id, newPerson)
+          .then((returnedPerson) => {
+            console.log(returnedPerson);
+            setPersons(persons.map((person) => person.id !== returnedPerson.id ? person : returnedPerson ));
+          });
+      }
+    } else {
+      personService
+        .create(newPerson)
+        .then((returnedPerson) => {
+          setPersons([...persons, returnedPerson]);
+        });
     }
-
-    personService
-      .create(newPerson)
-      .then((returnedPerson) => {
-        setPersons([...persons, returnedPerson]);
-      });
   }
 
   const handleDelete = (e, id) => {
