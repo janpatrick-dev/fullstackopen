@@ -41,7 +41,12 @@ const App = () => {
       return alert(`${newPerson.name} is already added to phonebook`);
     }
 
-    setPersons([...persons, newPerson]);
+    axios
+      .post('http://localhost:3001/persons', newPerson)
+      .then((response) => response.data)
+      .then((returnedPerson) => {
+        setPersons([...persons, returnedPerson]);
+      })
   }
 
   const personsToShow = filter 
