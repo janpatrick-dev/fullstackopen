@@ -28,7 +28,7 @@ const Countries = ({ countries }) => {
   return (
     <div>
       {countries.map((country, index) => (
-        <div>
+        <div key={country.altSpellings[0]}>
           {country.name.common}
           <button onClick={(e) => handleShowClick(e, index)}>
             {shows[index] ? 'hide' : 'show'}
