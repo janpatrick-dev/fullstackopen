@@ -11,8 +11,7 @@ const App = () => {
       countryService
       .getAll()
       .then((countries) => {
-        setCountries(
-          countries.filter(country => {
+        setCountries(countries.filter(country => {
             const countryName = country.name.common;
             return countryName.toLowerCase().includes(query.toLowerCase());
           })
