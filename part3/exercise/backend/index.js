@@ -4,6 +4,7 @@ const app = express();
 
 morgan.token('body', (request, response) => JSON.stringify(request.body));
 
+app.use(express.static('build'));
 app.use(express.json());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
@@ -29,6 +30,10 @@ let persons = [
     "number": "39-23-6423122"
   }
 ];
+
+app.get('/', (request, response) => {
+  response.send('<h1>Hello world</h1>');
+});
 
 app.get('/info', (request, response) => {
   response.send(
