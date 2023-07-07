@@ -12,30 +12,30 @@ const url = `mongodb+srv://janpatrickdev:${password}@cluster0.p0eedrj.mongodb.ne
 mongoose.set('strictQuery', false);
 mongoose.connect(url);
 
-const contactSchema = mongoose.Schema({
+const personSchema = mongoose.Schema({
   name: String,
   number: String
 });
 
-const Contact = mongoose.model('Contact', contactSchema);
+const Person = mongoose.model('Person', personSchema);
 
 if (process.argv.length < 5) {
-  Contact.find({}).then((contacts) => {
+  Person.find({}).then((persons) => {
     console.log('phonebook:');
-    contacts.forEach((contact) => {
-      console.log(`${contact.name} ${contact.number}`);
+    persons.forEach((person) => {
+      console.log(`${person.name} ${person.number}`);
     });
     mongoose.connection.close();
   });
   return;
 }
 
-const contact = new Contact({
+const person = new Person({
   name: process.argv[3],
   number: process.argv[4]
 });
 
-contact.save().then(result => {
+person.save().then(result => {
   console.log(`added ${result.name} number ${result.number} to phonebook`);
   mongoose.connection.close();
 });
