@@ -10,28 +10,6 @@ app.use(express.static('build'));
 app.use(express.json());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
-let persons = [
-  { 
-    "id": 1,
-    "name": "Arto Hellas", 
-    "number": "040-123456"
-  },
-  { 
-    "id": 2,
-    "name": "Ada Lovelace", 
-    "number": "39-44-5323523"
-  },
-  { 
-    "id": 3,
-    "name": "Dan Abramov", 
-    "number": "12-43-234345"
-  },
-  { 
-    "id": 4,
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122"
-  }
-];
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello world</h1>');
@@ -96,10 +74,6 @@ app.post('/api/persons', (request, response, next) => {
   if (!person.number) {
     throw new Error('Number is required');
   }
-  
-  if (persons.find(p => p.name === person.name)) {
-    throw new Error('Name must be unique');
-  }
 
   person.save()
     .then((savedPerson) => {
@@ -112,8 +86,7 @@ const errorHandler = (error, request, response, next) => {
   console.error(error.message);
 
   if (error.message === 'Name is required' ||
-      error.message === 'Number is required' ||
-      error.message === 'Name must be unique') {
+      error.message === 'Number is required') {
     return response.status(400).send({ error: error.message });
   }
 
