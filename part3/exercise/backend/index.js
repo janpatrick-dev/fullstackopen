@@ -69,7 +69,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
     .catch((error) => next(error));
 });
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body;
   const person = new Person({
     name: body.name,
@@ -77,27 +77,37 @@ app.post('/api/persons', (request, response) => {
   });
 
   if (!person.name) {
-    return response.status(400).json({
-      error: 'name is required'
-    });
+    throw new Error('Name is required');
   }
 
   if (!person.number) {
-    return response.status(400).json({
-      error: 'number is required'
-    });
+    throw new Error('Number is required');
   }
   
   if (persons.find(p => p.name === person.name)) {
-    return response.status(400).json({
-      error: 'name must be unique'
-    });
+    throw new Error('Name must be unique');
   }
 
-  person.save().then((savedPerson) => {
-    response.json(savedPerson);
-  });
+  person.save()
+    .then((savedPerson) => {
+      response.json(savedPerson);
+    })
+    .catch((error) => next(error));
 });
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.message === 'Name is required' ||
+      error.message === 'Number is required' ||
+      error.message === 'Name must be unique') {
+    return response.status(400).send({ error: error.message });
+  }
+
+  next(error);
+};
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
