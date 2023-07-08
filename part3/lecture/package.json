@@ -10,7 +10,8 @@
     "build.ui": "rmdir /s /q build && cd ../../part2/lecture && npm run build && xcopy build ..\\..\\part3\\lecture\\build\\ /E",
     "deploy": "fly deploy",
     "deploy:full": "npm run build.ui && npm run deploy",
-    "logs:prod": "fly logs"
+    "logs:prod": "fly logs",
+    "lint": "eslint ."
   },
   "author": "Jan Patrick Palacio",
   "license": "MIT",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@flydotio/dockerfile": "^0.2.16",
+    "eslint": "^8.44.0",
     "nodemon": "^2.0.22"
   }
 }

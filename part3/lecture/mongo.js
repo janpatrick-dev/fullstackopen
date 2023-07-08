@@ -24,7 +24,7 @@ Note.find({ important: true }).then(result => {
     console.log(note);
   });
   mongoose.connection.close();
-})
+});
 
 // const note = new Note({
 //   content: 'Mongoose makes things easy',

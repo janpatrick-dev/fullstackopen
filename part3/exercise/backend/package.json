@@ -10,7 +10,8 @@
         "build.ui": "rmdir /s /q build && cd ../../../part2/phonebook && npm run build && xcopy build ..\\..\\part3\\exercise\\backend\\build\\ /E",
         "deploy": "fly deploy",
         "deploy:full": "npm run build.ui && npm run deploy",
-        "logs:prod": "fly logs"
+        "logs:prod": "fly logs",
+        "lint": "eslint ."
     },
     "author": "Jan Patrick Palacio",
     "license": "MIT",
@@ -21,7 +22,8 @@
         "morgan": "^1.10.0"
     },
     "devDependencies": {
-        "@flydotio/dockerfile": "^0.2.16"
+        "@flydotio/dockerfile": "^0.2.16",
+        "eslint": "^8.44.0"
     },
     "proxy": "http://localhost:3001"
 }
