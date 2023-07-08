@@ -38,10 +38,12 @@ app.get('/', (request, response) => {
 });
 
 app.get('/info', (request, response) => {
-  response.send(
-    `<p>Phonebook has info for ${persons.length} people</p>` +
-    `<p>${new Date()}</p>`
-  );
+  Person.find({}).then((persons) => {
+    response.send(
+      `<p>Phonebook has info for ${persons.length} people</p>` +
+      `<p>${new Date()}</p>`
+    );
+  });
 });
 
 app.get('/api/persons', (request, response) => {
@@ -50,15 +52,12 @@ app.get('/api/persons', (request, response) => {
   });
 });
 
-app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id);
-  const person = persons.find(p => p.id === id);
-  
-  if (person) {
-    response.json(person);
-  } else {
-    response.status(404).end();
-  }
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+    .then((returnedPerson) => {
+      response.json(returnedPerson);
+    })
+    .catch((error) => next(error));
 });
 
 app.put('/api/persons/:id', (request, response, next) => {
