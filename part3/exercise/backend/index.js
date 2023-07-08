@@ -61,14 +61,13 @@ app.get('/api/persons/:id', (request, response, next) => {
 });
 
 app.put('/api/persons/:id', (request, response, next) => {
-  const body = request.body;
+  const { name, number } = request.body;
 
-  const person = {
-    name: body.name,
-    number: body.number
-  };
-
-  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+  Person.findByIdAndUpdate(
+    request.params.id, 
+    { name, number }, 
+    { new: true, runValidators: true, context: 'query' }
+  )
     .then((updatedPerson) => {
       response.json(updatedPerson);
     })
@@ -118,12 +117,16 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).send({ error: error.message });
   }
 
+  if (error.name === 'ValidationError') {
+    return response.status(400).send({ error: error.message });
+  }
+
   next(error);
 };
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`app listening on ${PORT}`);
 });

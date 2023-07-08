@@ -73,6 +73,9 @@ const App = () => {
             setSuccess(null);
           }, 5000);
           setPersons([...persons, returnedPerson]);
+        })
+        .catch((e) => {
+          setError(e.response.data.error);
         });
     }
   }

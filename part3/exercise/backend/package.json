@@ -18,5 +18,6 @@
     },
     "devDependencies": {
         "@flydotio/dockerfile": "^0.2.16"
-    }
+    },
+    "proxy": "http://localhost:3001"
 }
