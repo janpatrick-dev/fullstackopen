@@ -1,3 +1,8 @@
+const app = require('../app');
+const supertest = require('supertest');
+const api = supertest(app);
+const mongoose = require('mongoose');
+
 const dummy = require('../utils/list_helper').dummy;
 const totalLikes = require('../utils/list_helper').totalLikes;
 const favoriteBlog = require('../utils/list_helper').favoriteBlog;
@@ -146,4 +151,17 @@ describe('most likes', () => {
       likes: 17
     });
   });
+});
+
+test('get all blogs', async () => {
+  const response = await api
+    .get('/api/blogs')
+    .expect(200)
+    .expect('Content-Type', /application\/json/);
+
+  expect(response.body).toHaveLength(2);
+}, 100000);
+
+afterAll(async () => {
+  await mongoose.connection.close();
 });
