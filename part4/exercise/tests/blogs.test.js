@@ -105,7 +105,7 @@ describe('most likes', () => {
 });
 
 describe('exercises 4.8 to 4.12', () => {
-  test('4.8 - get all blogs using supertest', async () => {
+  test('4.8 - get all blogs', async () => {
     const response = await api
       .get('/api/blogs')
       .expect(200)
@@ -121,12 +121,35 @@ describe('exercises 4.8 to 4.12', () => {
 
   test('4.10 - verify if blog was created successfully', async () => {
     const blogObject = { ...helper.listWithOneBlog[0] };
-    await helper.createBlog(blogObject);
+    
+    await api
+      .post('/api/blogs')
+      .send(blogObject)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
 
     const currentBlogs = await helper.blogsInDb();
 
     expect(currentBlogs).toHaveLength(7);
     expect(currentBlogs.map((b) => b.title)).toContain('Test Blog');
+  });
+
+  test('4.11 - verify if likes property is missing from request', async () => {
+    const blogObject = { ...helper.listWithOneBlog[0] };
+    delete blogObject.likes;
+
+    expect(blogObject.likes).not.toBeDefined();
+
+    const response = await api
+      .post('/api/blogs')
+      .send(blogObject)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const newBlog = response.body;
+
+    expect(newBlog.likes).toBeDefined();
+    expect(newBlog.likes).toBe(0);
   });
 });
 

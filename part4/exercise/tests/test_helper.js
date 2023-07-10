@@ -67,14 +67,8 @@ const blogsInDb = async () => {
   return blogs;
 };
 
-const createBlog = async (body) => {
-  const newBlog = new Blog(body);
-  await newBlog.save();
-}
-
 module.exports = {
   listWithOneBlog,
   blogs,
-  blogsInDb,
-  createBlog
-}
+  blogsInDb
+};
