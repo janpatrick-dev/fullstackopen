@@ -151,6 +151,31 @@ describe('exercises 4.8 to 4.12', () => {
     expect(newBlog.likes).toBeDefined();
     expect(newBlog.likes).toBe(0);
   });
+
+  test.only('4.12 - verify if the title or url property are missing from request', async () => {
+    const blogObject = { ...helper.listWithOneBlog[0] };
+    delete blogObject.title;
+
+    await api
+      .post('/api/blogs')
+      .send(blogObject)
+      .expect(400);
+
+    blogObject.title = helper.listWithOneBlog[0].title;
+
+    expect(blogObject).toEqual(helper.listWithOneBlog[0]);
+
+    delete blogObject.url;
+
+    await api
+      .post('/api/blogs')
+      .send(blogObject)
+      .expect(400);
+
+    blogObject.url = helper.listWithOneBlog[0].url;
+
+    expect(blogObject).toEqual(helper.listWithOneBlog[0]);
+  });
 });
 
 
