@@ -160,7 +160,16 @@ test('get all blogs', async () => {
     .expect('Content-Type', /application\/json/);
 
   expect(response.body).toHaveLength(2);
-}, 100000);
+});
+
+test.only('verify if id property exists in blog', async () => {
+  const response = await api
+    .get('/api/blogs')
+    .expect(200)
+    .expect('Content-Type', /application\/json/);
+
+  expect(response.body[0].id).toBeDefined();
+});
 
 afterAll(async () => {
   await mongoose.connection.close();
