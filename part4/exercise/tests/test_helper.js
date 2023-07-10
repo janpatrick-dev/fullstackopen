@@ -67,8 +67,13 @@ const blogsInDb = async () => {
   return blogs;
 };
 
+const deleteBlog = async (id) => {
+  await Blog.findByIdAndRemove(id);
+}
+
 module.exports = {
   listWithOneBlog,
   blogs,
-  blogsInDb
+  blogsInDb,
+  deleteBlog
 };

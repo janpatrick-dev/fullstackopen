@@ -152,7 +152,7 @@ describe('exercises 4.8 to 4.12', () => {
     expect(newBlog.likes).toBe(0);
   });
 
-  test.only('4.12 - verify if the title or url property are missing from request', async () => {
+  test('4.12 - verify if the title or url property are missing from request', async () => {
     const blogObject = { ...helper.listWithOneBlog[0] };
     delete blogObject.title;
 
@@ -178,7 +178,19 @@ describe('exercises 4.8 to 4.12', () => {
   });
 });
 
+describe('exercises 4.13 - 4.14', () => {
+  test('4.13 delete a single blog post resource', async () => {
+    let blogs = await helper.blogsInDb();
+    const blogToDelete = blogs[0];
 
+    await helper.deleteBlog(blogToDelete.id);
+
+    blogs = await helper.blogsInDb();
+    expect(blogs.map((b) => b.title))
+      .not
+      .toContain(blogToDelete.title);
+  });
+});
 
 afterAll(async () => {
   await mongoose.connection.close();
