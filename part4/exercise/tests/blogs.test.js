@@ -190,6 +190,20 @@ describe('exercises 4.13 - 4.14', () => {
       .not
       .toContain(blogToDelete.title);
   });
+
+  test.only('4.14 verify if likes of blog post is updated', async () => {
+    let blogs = await helper.blogsInDb();
+    let blogToUpdate = blogs[0];
+
+    expect(blogToUpdate.likes).toBe(7);
+
+    await helper.updateLikes(blogToUpdate.id, 10);
+    
+    blogs = await helper.blogsInDb();
+    blogToUpdate = blogs[0];
+
+    expect(blogToUpdate.likes).toBe(10);
+  });
 });
 
 afterAll(async () => {

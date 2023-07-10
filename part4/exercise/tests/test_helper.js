@@ -69,11 +69,16 @@ const blogsInDb = async () => {
 
 const deleteBlog = async (id) => {
   await Blog.findByIdAndRemove(id);
-}
+};
+
+const updateLikes = async (id, value) => {
+  await Blog.findByIdAndUpdate(id, { likes: value }, { new: true });
+};
 
 module.exports = {
   listWithOneBlog,
   blogs,
   blogsInDb,
-  deleteBlog
+  deleteBlog,
+  updateLikes
 };
