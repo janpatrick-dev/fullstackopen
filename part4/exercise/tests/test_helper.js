@@ -1,4 +1,5 @@
-const Blog = require("../models/blog");
+const Blog = require('../models/blog');
+const User = require('../models/user');
 
 const listWithOneBlog = [
   {
@@ -75,10 +76,16 @@ const updateLikes = async (id, value) => {
   await Blog.findByIdAndUpdate(id, { likes: value }, { new: true });
 };
 
+const usersInDb = async () => {
+  const users = await User.find({});
+  return users;
+};
+
 module.exports = {
   listWithOneBlog,
   blogs,
   blogsInDb,
   deleteBlog,
-  updateLikes
+  updateLikes,
+  usersInDb
 };
