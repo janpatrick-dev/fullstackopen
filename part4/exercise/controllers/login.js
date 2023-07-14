@@ -5,6 +5,9 @@ const User = require('../models/user');
 
 loginRouter.post('/', async (request, response) => {
   const { username, password } = request.body;
+  const secret = process.env.NODE_ENV === 'test'
+    ? process.env.TEST_SECRET
+    : process.env.SECRET;
 
   const user = await User.findOne({ username });
   const passwordValid = user === null
@@ -23,7 +26,7 @@ loginRouter.post('/', async (request, response) => {
   // token expires in 1 hour
   const token = jwt.sign(
     userForToken,
-    process.env.SECRET,
+    secret,
     { expiresIn: 60*60 }
   );
 

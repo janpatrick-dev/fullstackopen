@@ -9,20 +9,20 @@ usersRouter.get('/', async (request, response) => {
   response.json(users);
 });
 
-usersRouter.post('/', async (request, response) => {
+usersRouter.post('/', async (request, response, next) => {
   const { username, password, name } = request.body;
 
   try {
     if (!username) {
-      return response.status(401).json({ error: 'username is required!' });
+      return response.status(400).json({ error: 'username is required!' });
     }
 
     if (!password) {
-      return response.status(401).json({ error: 'password is required!' });
+      return response.status(400).json({ error: 'password is required!' });
     }
 
     if (password.length < 3) {
-      return response.status(401).json({ error: 'password must be 3 characters or more' });
+      return response.status(400).json({ error: 'password must be 3 characters or more' });
     }
 
     const saltRounds = 10;
@@ -37,7 +37,7 @@ usersRouter.post('/', async (request, response) => {
   
     response.status(201).json(savedUser);
   } catch (exception) {
-    response.status(401).json({ error: exception.message });
+    next(exception);
   }
 });
 

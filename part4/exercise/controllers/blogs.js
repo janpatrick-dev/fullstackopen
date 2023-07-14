@@ -18,11 +18,11 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   const body = request.body;
 
   if (!body.title) {
-    return response.status(401).json({ error: 'title is required' });
+    return response.status(400).json({ error: 'title is required' });
   }
 
   if (!body.url) {
-    return response.status(401).json({ error: 'url is required' });
+    return response.status(400).json({ error: 'url is required' });
   }
 
   try {
@@ -53,7 +53,7 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
     const blog = await Blog.findById(request.params.id);
 
     if (!blog) {
-      return response.status(401).json({ error: 'blog does not exist!' });
+      return response.status(404).json({ error: 'blog does not exist!' });
     }
 
     if (currentUser.id !== blog.user.toString()) {

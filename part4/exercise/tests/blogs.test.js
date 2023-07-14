@@ -1,9 +1,11 @@
+const jwt = require('jsonwebtoken');
 const app = require('../app');
 const supertest = require('supertest');
 const api = supertest(app);
 const mongoose = require('mongoose');
 const Blog = require('../models/blog');
 const helper = require('./test_helper');
+const User = require('../models/user');
 
 const dummy = require('../utils/list_helper').dummy;
 const totalLikes = require('../utils/list_helper').totalLikes;
@@ -105,6 +107,15 @@ describe('most likes', () => {
 });
 
 describe('exercises 4.8 to 4.12', () => {
+  beforeEach(async () => {
+    await User.deleteMany({});
+
+    const userObject = { ...helper.listWithOneUser[0] };
+    const user = new User(userObject);
+
+    await user.save();
+  });
+
   test('4.8 - get all blogs', async () => {
     const response = await api
       .get('/api/blogs')
@@ -120,10 +131,23 @@ describe('exercises 4.8 to 4.12', () => {
   });
 
   test('4.10 - verify if blog was created successfully', async () => {
-    const blogObject = { ...helper.listWithOneBlog[0] };
+    const { token, decodedToken, user } = await helper.currentUser();
+
+    const blogObject = { 
+      _id: '5a422aa71b54a676234d17ff',
+      title: 'Test Blog',
+      author: user.name,
+      user: decodedToken.id,
+      url: 'www.example.com',
+      likes: 50,
+      __v: 0
+    };
+
+    expect(decodedToken.id).toBe(blogObject.user.toString());
     
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(blogObject)
       .expect(201)
       .expect('Content-Type', /application\/json/);
@@ -135,29 +159,36 @@ describe('exercises 4.8 to 4.12', () => {
   });
 
   test('4.11 - verify if likes property is missing from request', async () => {
-    const blogObject = { ...helper.listWithOneBlog[0] };
+    const { token, decodedToken } = await helper.currentUser();
+
+    const blogObject = { ...helper.listWithOneBlog[0], user: decodedToken.id };
     delete blogObject.likes;
 
     expect(blogObject.likes).not.toBeDefined();
 
     const response = await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(blogObject)
       .expect(201)
       .expect('Content-Type', /application\/json/);
 
     const newBlog = response.body;
 
+    expect(newBlog.user.toString()).toBe(decodedToken.id);
     expect(newBlog.likes).toBeDefined();
     expect(newBlog.likes).toBe(0);
   });
 
   test('4.12 - verify if the title or url property are missing from request', async () => {
-    const blogObject = { ...helper.listWithOneBlog[0] };
+    const { token, decodedToken, user } = await helper.currentUser();
+    
+    const blogObject = { ...helper.listWithOneBlog[0], user: decodedToken.id };
     delete blogObject.title;
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(blogObject)
       .expect(400);
 
@@ -169,6 +200,7 @@ describe('exercises 4.8 to 4.12', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(blogObject)
       .expect(400);
 
@@ -203,6 +235,26 @@ describe('exercises 4.13 - 4.14', () => {
     blogToUpdate = blogs[0];
 
     expect(blogToUpdate.likes).toBe(10);
+  });
+});
+
+describe('exercises 4.15 - 4.23', () => {
+  test('log in with valid credentials', async () => {
+    const loginResponse = await api
+      .post('/api/login')
+      .send({ username: 'testuser', password: 'password' })
+      .expect(200);
+
+    expect(loginResponse.body.token).toBeDefined();
+  });
+
+  test('adding new blog without token results to 401', async () => {
+    const blogObject = { ...helper.listWithOneBlog[0] };
+
+    await api
+      .post('/api/blogs')
+      .send(blogObject)
+      .expect(401);
   });
 });
 

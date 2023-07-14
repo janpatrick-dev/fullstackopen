@@ -16,7 +16,7 @@ describe('4.16 creating a new user', () => {
     const response = await api
       .post('/api/users')
       .send(body)
-      .expect(401)
+      .expect(400)
       .expect('Content-Type', /application\/json/);
       
     expect(response.body.error).toBe('username is required!');
@@ -28,7 +28,7 @@ describe('4.16 creating a new user', () => {
     const response = await api
       .post('/api/users')
       .send(body)
-      .expect(401)
+      .expect(400)
       .expect('Content-Type', /application\/json/);
       
     expect(response.body.error).toBe('password is required!');
@@ -40,7 +40,7 @@ describe('4.16 creating a new user', () => {
     const response = await api
       .post('/api/users')
       .send(body)
-      .expect(401)
+      .expect(400)
       .expect('Content-Type', /application\/json/);
 
     expect(response.body.error).toMatch(/User validation failed/);
@@ -53,7 +53,7 @@ describe('4.16 creating a new user', () => {
     const response = await api
       .post('/api/users')
       .send(body)
-      .expect(401)
+      .expect(400)
       .expect('Content-Type', /application\/json/);
 
     expect(response.body.error).toMatch(/characters or more/);
