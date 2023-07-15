@@ -9,15 +9,11 @@ const getAll = async () => {
 }
 
 const create = async (body) => {
-  try {
-    const config = {
-      headers: { Authorization: loginService.getToken() }
-    };
-    const response = await axios.post(baseUrl, body, config);
-    return response.data;
-  } catch (exception) {
-    console.error(exception);
-  }
+  const config = {
+    headers: { Authorization: loginService.getToken() }
+  };
+  const response = await axios.post(baseUrl, body, config);
+  return response.data;
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export

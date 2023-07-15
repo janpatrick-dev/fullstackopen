@@ -4,10 +4,13 @@ import blogService from './services/blogs';
 import Blogs from './components/Blogs';
 import Login from './components/Login';
 import CreateBlogForm from './components/CreateBlogForm';
+import NotifHelper from './utils/notificationHelper';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -18,7 +21,9 @@ const App = () => {
   useEffect(() => {
     const savedUserJSON = localStorage.getItem('currentUser');
     if (savedUserJSON) {
-      setUser(JSON.parse(savedUserJSON));
+      const savedUser = JSON.parse(savedUserJSON);
+      setUser(savedUser);
+      loginService.setToken(savedUser.token);
     }
   }, [])
 
@@ -31,8 +36,10 @@ const App = () => {
       window.localStorage.setItem('currentUser', JSON.stringify(user));
       loginService.setToken(user.token);
       setUser(user);
+      NotifHelper.showSuccess(setSuccess, `Hello, ${user.name}`);
     } catch (exception) {
       console.error(exception);
+      NotifHelper.showError(setError, exception.response.data.error);
     }
   };
 
@@ -44,12 +51,20 @@ const App = () => {
   const handleCreateBlog = async (e, blogBody) => {
     e.preventDefault();
 
-    const blog = await blogService.create(blogBody);
-    setBlogs([...blogs, blog]);
+    try {
+      const blog = await blogService.create(blogBody);
+      setBlogs([...blogs, blog]);
+      NotifHelper.showSuccess(
+        setSuccess, 
+        `a new blog ${blog.title} by ${blog.author}`
+      );
+    } catch (exception) {
+      NotifHelper.showError(setError, exception.message);
+    }
   }
 
   if (user === null) {
-    return <Login handleLogin={handleLogin} />;
+    return <Login handleLogin={handleLogin} error={error} />;
   }
 
   return (
@@ -58,6 +73,8 @@ const App = () => {
         blogs={blogs} 
         user={user}
         handleLogout={handleLogout}
+        error={error}
+        success={success}
       />
       <CreateBlogForm handleCreateBlog={handleCreateBlog} />
     </div>
