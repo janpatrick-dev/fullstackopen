@@ -3,6 +3,7 @@ import loginService from './services/login';
 import blogService from './services/blogs';
 import Blogs from './components/Blogs';
 import Login from './components/Login';
+import CreateBlogForm from './components/CreateBlogForm';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -28,6 +29,7 @@ const App = () => {
       const user = await loginService.login({ username, password });
 
       window.localStorage.setItem('currentUser', JSON.stringify(user));
+      loginService.setToken(user.token);
       setUser(user);
     } catch (exception) {
       console.error(exception);
@@ -39,6 +41,13 @@ const App = () => {
     setUser(null);
   }
 
+  const handleCreateBlog = async (e, blogBody) => {
+    e.preventDefault();
+
+    const blog = await blogService.create(blogBody);
+    setBlogs([...blogs, blog]);
+  }
+
   if (user === null) {
     return <Login handleLogin={handleLogin} />;
   }
@@ -48,8 +57,9 @@ const App = () => {
       <Blogs 
         blogs={blogs} 
         user={user}
-        handleLogout={handleLogout} 
+        handleLogout={handleLogout}
       />
+      <CreateBlogForm handleCreateBlog={handleCreateBlog} />
     </div>
   )
 }
