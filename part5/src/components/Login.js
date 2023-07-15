@@ -4,10 +4,16 @@ const Login = ({ handleLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const handleSubmit = (e) => {
+    handleLogin(e, username, password);
+    setUsername('');
+    setPassword('');
+  }
+
   return (
     <div>
       <h2>log in to application</h2>
-      <form onSubmit={(e) => handleLogin(e, username, password)}>
+      <form onSubmit={handleSubmit}>
         <div>
           username
           <input

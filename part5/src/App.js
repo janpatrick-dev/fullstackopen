@@ -14,16 +14,30 @@ const App = () => {
     );  
   }, []);
 
+  useEffect(() => {
+    const savedUserJSON = localStorage.getItem('currentUser');
+    if (savedUserJSON) {
+      setUser(JSON.parse(savedUserJSON));
+    }
+  }, [])
+
   const handleLogin = async (e, username, password) => {
     e.preventDefault();
 
     try {
       const user = await loginService.login({ username, password });
+
+      window.localStorage.setItem('currentUser', JSON.stringify(user));
       setUser(user);
     } catch (exception) {
       console.error(exception);
     }
   };
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('currentUser');
+    setUser(null);
+  }
 
   if (user === null) {
     return <Login handleLogin={handleLogin} />;
@@ -31,7 +45,11 @@ const App = () => {
 
   return (
     <div>
-      <Blogs blogs={blogs} />
+      <Blogs 
+        blogs={blogs} 
+        user={user}
+        handleLogout={handleLogout} 
+      />
     </div>
   )
 }
