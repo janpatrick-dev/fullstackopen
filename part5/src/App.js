@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import loginService from './services/login';
 import blogService from './services/blogs';
 import Blogs from './components/Blogs';
 import Login from './components/Login';
-import CreateBlogForm from './components/CreateBlogForm';
 import NotifHelper from './utils/notificationHelper';
 
 const App = () => {
@@ -48,9 +47,11 @@ const App = () => {
     setUser(null);
   }
 
+  const blogFormRef = useRef();
   const handleCreateBlog = async (e, blogBody) => {
     e.preventDefault();
 
+    blogFormRef.current.toggleVisibility();
     try {
       const blog = await blogService.create(blogBody);
       setBlogs([...blogs, blog]);
@@ -73,10 +74,11 @@ const App = () => {
         blogs={blogs} 
         user={user}
         handleLogout={handleLogout}
+        handleCreateBlog={handleCreateBlog}
+        blogFormRef={blogFormRef}
         error={error}
         success={success}
       />
-      <CreateBlogForm handleCreateBlog={handleCreateBlog} />
     </div>
   )
 }

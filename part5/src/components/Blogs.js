@@ -1,12 +1,15 @@
-import { useState } from 'react';
 import Blog from "./Blog";
 import Notification from "./Notification";
+import CreateBlogForm from './CreateBlogForm';
+import Togglable from './Togglable';
 
 const Blogs = (props) => {
   const { 
     blogs, 
     user, 
-    handleLogout, 
+    handleLogout,
+    handleCreateBlog,
+    blogFormRef, 
     error, 
     success 
   } = props;
@@ -21,6 +24,9 @@ const Blogs = (props) => {
         {user.name} logged in
         <button onClick={handleLogout}>logout</button>
       </p>
+      <Togglable buttonLabel='new note' ref={blogFormRef}>
+        <CreateBlogForm handleCreateBlog={handleCreateBlog} />
+      </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
