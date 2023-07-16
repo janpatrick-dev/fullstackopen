@@ -16,6 +16,19 @@ const Togglable = forwardRef((props, refs) => {
     }
   });
 
+  if (props.type === 'blog') {
+    let buttonLabel = visible ? 'hide' : props.buttonLabel;
+
+    return (
+      <div style={{ display: 'inline' }}>
+        <button onClick={toggleVisibility}>{ buttonLabel }</button>
+        <div style={showIfVisible}>
+          { props.children }
+        </div>
+      </div>
+    )
+  }
+
   return ( 
     <div>
       <div style={hideIfVisible}>
