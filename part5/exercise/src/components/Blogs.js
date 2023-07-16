@@ -10,6 +10,7 @@ const Blogs = (props) => {
     handleLogout,
     handleCreateBlog,
     handleLike,
+    handleDelete,
     blogFormRef, 
     error, 
     success 
@@ -29,7 +30,13 @@ const Blogs = (props) => {
         <CreateBlogForm handleCreateBlog={handleCreateBlog} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} handleLike={handleLike} />
+        <Blog 
+          key={blog.id} 
+          blog={blog} 
+          user={user}
+          handleLike={handleLike}
+          handleDelete={handleDelete}
+        />
       )}
     </div>
   )

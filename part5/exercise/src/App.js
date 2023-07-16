@@ -88,6 +88,17 @@ const App = () => {
     setBlogs(sortByLikesDesc(updatedBlogs));
   }
 
+  const handleDelete = async (e, blogToDelete) => {
+    e.preventDefault();
+
+    const { title, author, id } = blogToDelete;
+
+    if (window.confirm(`Remove blog ${title} by ${author}`)) {
+      await blogService.remove(id);
+      setBlogs(blogs.filter((b) => b.id !== id));
+    }
+  }
+
   if (user === null) {
     return <Login handleLogin={handleLogin} error={error} />;
   }
@@ -100,6 +111,7 @@ const App = () => {
         handleLogout={handleLogout}
         handleCreateBlog={handleCreateBlog}
         handleLike={handleLike}
+        handleDelete={handleDelete}
         blogFormRef={blogFormRef}
         error={error}
         success={success}
