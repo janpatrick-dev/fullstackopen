@@ -64,6 +64,26 @@ const App = () => {
     }
   }
 
+  const handleLike = async (e, blog) => {
+    e.preventDefault();
+
+    const updatedBlog = {
+      ...blog,
+      likes: blog.likes + 1
+    };
+
+    await blogService.update(blog.id, updatedBlog);
+    
+    const updatedBlogs = blogs.map((b) => {
+      if (b.id === updatedBlog.id) {
+        return updatedBlog;
+      }
+      return b
+    });
+
+    setBlogs(updatedBlogs);
+  }
+
   if (user === null) {
     return <Login handleLogin={handleLogin} error={error} />;
   }
@@ -75,6 +95,7 @@ const App = () => {
         user={user}
         handleLogout={handleLogout}
         handleCreateBlog={handleCreateBlog}
+        handleLike={handleLike}
         blogFormRef={blogFormRef}
         error={error}
         success={success}
