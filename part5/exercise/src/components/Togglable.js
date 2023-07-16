@@ -21,8 +21,10 @@ const Togglable = forwardRef((props, refs) => {
 
     return (
       <div style={{ display: 'inline' }}>
-        <button onClick={toggleVisibility}>{ buttonLabel }</button>
-        <div style={showIfVisible}>
+        <button onClick={toggleVisibility} className='blogDisplayButton'>
+          { buttonLabel }
+        </button>
+        <div style={showIfVisible} className='blogDetailsContent'>
           { props.children }
         </div>
       </div>
@@ -34,7 +36,7 @@ const Togglable = forwardRef((props, refs) => {
       <div style={hideIfVisible}>
         <button onClick={toggleVisibility}>{ props.buttonLabel }</button>
       </div>
-      <div style={showIfVisible} className='blogExtraDetails'>
+      <div style={showIfVisible}>
         { props.children }
         <button onClick={toggleVisibility}>cancel</button>
       </div>

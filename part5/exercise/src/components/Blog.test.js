@@ -3,11 +3,9 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import userEvent from '@testing-library/user-event';
 import Blog from './Blog';
-import Togglable from './Togglable';
 
 describe('<Blog />', () => {
   let container;
-  let togglableContainer;
 
   beforeEach(() => {
     const user = {
@@ -35,25 +33,14 @@ describe('<Blog />', () => {
         handleLike={handleLike}
       />
     ).container;
-
-    togglableContainer = render(
-      <Togglable buttonLabel='view'>
-        <div>{ blog.url }</div>
-        <div>
-          likes: { blog.likes }
-          <button onClick={handleLike}>like</button>
-        </div>
-        <div>{ blog.author }</div>
-      </Togglable>
-    ).container;
   });
 
-  test('blog displays title and author but does not render url and likes by default', async () => {
+  test('5.13 blog displays title and author but does not render url and likes by default', async () => {
     const titleAndAuthor = screen.getByText('Test Blog John Doe');
 
     expect(titleAndAuthor).toBeDefined();
 
-    const div = togglableContainer.querySelector('.blogExtraDetails');
+    const div = container.querySelector('.blogDetailsContent');
     expect(div).toHaveStyle('display: none');
   });
 });
