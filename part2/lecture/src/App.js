@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import noteService from './services/notes';
 import loginService from './services/login';
-import Note from "./components/Note";
+import Note from './components/Note';
 import Notification from './components/Notification';
 import Footer from './components/Footer';
 import LoginForm from './components/LoginForm';
@@ -19,8 +19,8 @@ const App = (props) => {
   useEffect(() => {
     noteService
       .getAll()
-      .then((initialNotes) => setNotes(initialNotes))
-  }, [])
+      .then((initialNotes) => setNotes(initialNotes));
+  }, []);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteAppUser');
@@ -29,10 +29,10 @@ const App = (props) => {
       setUser(user);
       noteService.setToken(user.token);
     }
-  }, [])
+  }, []);
 
-  const notesToShow = showAll 
-    ? notes 
+  const notesToShow = showAll
+    ? notes
     : notes.filter(note => note.important);
 
   const addNote = (noteObject) => {
@@ -62,13 +62,13 @@ const App = (props) => {
       .catch((error) => {
         setErrorMessage(
           `Note '${note.content}' was already removed from the server`
-        )
+        );
         setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
+          setErrorMessage(null);
+        }, 5000);
         setNotes(notes.filter(n => n.id !== id));
-      })
-  }
+      });
+  };
 
   const handleLogin = async (credentials) => {
     try {
@@ -82,14 +82,14 @@ const App = (props) => {
       setErrorMessage('Invalid credentials');
       setTimeout(() => {
         setErrorMessage(null);
-      }, 5000)
+      }, 5000);
     }
   };
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedNoteAppUser');
     setUser('');
-  }
+  };
 
   const loginForm = () => {
     return (
@@ -98,14 +98,14 @@ const App = (props) => {
           handleSubmit={handleLogin}
         />
       </Togglable>
-    )
-  }
+    );
+  };
 
   const noteFormRef = useRef();
 
   const noteForm = () => (
     <Togglable buttonLabel='new note' ref={noteFormRef}>
-      <NoteForm 
+      <NoteForm
         createNote={addNote}
       />
     </Togglable>
@@ -126,16 +126,16 @@ const App = (props) => {
           {noteForm()}
         </div>
       )}
-      
+
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
         </button>
       </div>
       <ul>
-        {notesToShow.map((note) => 
-          <Note 
-            key={note.id} 
+        {notesToShow.map((note) =>
+          <Note
+            key={note.id}
             note={note}
             toggleImportance={() => toggleImportanceOf(note.id)} />
         )}
@@ -143,6 +143,6 @@ const App = (props) => {
       <Footer />
     </div>
   );
-}
+};
 
 export default App;
