@@ -9,7 +9,7 @@ const Login = ({ handleLogin, error }) => {
     handleLogin(e, username, password);
     setUsername('');
     setPassword('');
-  }
+  };
 
   return (
     <div>
@@ -37,7 +37,7 @@ const Login = ({ handleLogin, error }) => {
         <button type='submit'>login</button>
       </form>
     </div>
-  )
+  );
 };
 
 export default Login;

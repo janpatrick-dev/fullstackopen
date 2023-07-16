@@ -10,7 +10,7 @@ const CreateBlogForm = ({ handleCreateBlog }) => {
     setTitle('');
     setAuthor('');
     setUrl('');
-  }
+  };
 
   return (
     <div>
@@ -46,7 +46,7 @@ const CreateBlogForm = ({ handleCreateBlog }) => {
         <button type='submit'>create</button>
       </form>
     </div>
-  )
+  );
 };
 
 export default CreateBlogForm;

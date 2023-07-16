@@ -7,7 +7,7 @@ const Notification = ({ className, message }) => {
     <div className={className}>
       { message }
     </div>
-  )
-}
+  );
+};
 
 export default Notification;

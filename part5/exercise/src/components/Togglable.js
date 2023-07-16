@@ -8,12 +8,12 @@ const Togglable = forwardRef((props, refs) => {
 
   const toggleVisibility = () => {
     setVisible(!visible);
-  }
+  };
 
   useImperativeHandle(refs, () => {
     return {
       toggleVisibility
-    }
+    };
   });
 
   if (props.type === 'blog') {
@@ -26,10 +26,10 @@ const Togglable = forwardRef((props, refs) => {
           { props.children }
         </div>
       </div>
-    )
+    );
   }
 
-  return ( 
+  return (
     <div>
       <div style={hideIfVisible}>
         <button onClick={toggleVisibility}>{ props.buttonLabel }</button>
@@ -41,5 +41,7 @@ const Togglable = forwardRef((props, refs) => {
     </div>
   );
 });
- 
+
+Togglable.displayName = 'Togglable';
+
 export default Togglable;

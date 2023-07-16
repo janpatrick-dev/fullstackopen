@@ -4,9 +4,9 @@ import loginService from './login';
 const baseUrl = '/api/blogs';
 
 const getAll = async () => {
-  const response = await axios.get(baseUrl)
+  const response = await axios.get(baseUrl);
   return response.data;
-}
+};
 
 const create = async (body) => {
   const config = {
@@ -14,7 +14,7 @@ const create = async (body) => {
   };
   const response = await axios.post(baseUrl, body, config);
   return response.data;
-}
+};
 
 const update = async (id, body) => {
   const config = {
@@ -22,7 +22,7 @@ const update = async (id, body) => {
   };
   const response = await axios.put(`${baseUrl}/${id}`, body, config);
   return response.data;
-}
+};
 
 const remove = async (id) => {
   const config = {
@@ -30,7 +30,6 @@ const remove = async (id) => {
   };
   const response = await axios.delete(`${baseUrl}/${id}`, config);
   return response.data;
-}
+};
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, create, update, remove }
+export default { getAll, create, update, remove };

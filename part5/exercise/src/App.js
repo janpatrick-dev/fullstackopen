@@ -14,7 +14,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(sortByLikesDesc(blogs))
-    );  
+    );
   }, []);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const App = () => {
       setUser(savedUser);
       loginService.setToken(savedUser.token);
     }
-  }, [])
+  }, []);
 
   const sortByLikesDesc = (allBlogs) => {
     return allBlogs.sort((a, b) => b.likes - a.likes);
@@ -49,7 +49,7 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('currentUser');
     setUser(null);
-  }
+  };
 
   const blogFormRef = useRef();
   const handleCreateBlog = async (e, blogBody) => {
@@ -60,13 +60,13 @@ const App = () => {
       const blog = await blogService.create(blogBody);
       setBlogs(sortByLikesDesc([...blogs, blog]));
       NotifHelper.showSuccess(
-        setSuccess, 
+        setSuccess,
         `a new blog ${blog.title} by ${blog.author}`
       );
     } catch (exception) {
       NotifHelper.showError(setError, exception.message);
     }
-  }
+  };
 
   const handleLike = async (e, blog) => {
     e.preventDefault();
@@ -77,16 +77,16 @@ const App = () => {
     };
 
     await blogService.update(blog.id, updatedBlog);
-    
+
     const updatedBlogs = blogs.map((b) => {
       if (b.id === updatedBlog.id) {
         return updatedBlog;
       }
-      return b
+      return b;
     });
 
     setBlogs(sortByLikesDesc(updatedBlogs));
-  }
+  };
 
   const handleDelete = async (e, blogToDelete) => {
     e.preventDefault();
@@ -97,7 +97,7 @@ const App = () => {
       await blogService.remove(id);
       setBlogs(blogs.filter((b) => b.id !== id));
     }
-  }
+  };
 
   if (user === null) {
     return <Login handleLogin={handleLogin} error={error} />;
@@ -105,8 +105,8 @@ const App = () => {
 
   return (
     <div>
-      <Blogs 
-        blogs={blogs} 
+      <Blogs
+        blogs={blogs}
         user={user}
         handleLogout={handleLogout}
         handleCreateBlog={handleCreateBlog}
@@ -117,7 +117,7 @@ const App = () => {
         success={success}
       />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

@@ -1,26 +1,26 @@
-import Blog from "./Blog";
-import Notification from "./Notification";
+import Blog from './Blog';
+import Notification from './Notification';
 import CreateBlogForm from './CreateBlogForm';
 import Togglable from './Togglable';
 
 const Blogs = (props) => {
-  const { 
-    blogs, 
-    user, 
+  const {
+    blogs,
+    user,
     handleLogout,
     handleCreateBlog,
     handleLike,
     handleDelete,
-    blogFormRef, 
-    error, 
-    success 
+    blogFormRef,
+    error,
+    success
   } = props;
 
   return (
     <div>
       <h2>blogs</h2>
-      <Notification 
-        className={error ? 'error' : 'success'} 
+      <Notification
+        className={error ? 'error' : 'success'}
         message={error || success} />
       <p>
         {user.name} logged in
@@ -30,16 +30,16 @@ const Blogs = (props) => {
         <CreateBlogForm handleCreateBlog={handleCreateBlog} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog 
-          key={blog.id} 
-          blog={blog} 
+        <Blog
+          key={blog.id}
+          blog={blog}
           user={user}
           handleLike={handleLike}
           handleDelete={handleDelete}
         />
       )}
     </div>
-  )
-}
+  );
+};
 
 export default Blogs;

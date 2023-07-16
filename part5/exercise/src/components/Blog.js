@@ -1,4 +1,5 @@
-import Togglable from "./Togglable";
+import PropType from 'prop-types';
+import Togglable from './Togglable';
 
 const Blog = ({ blog, user, handleLike, handleDelete }) => {
   const blogStyle = {
@@ -7,13 +8,13 @@ const Blog = ({ blog, user, handleLike, handleDelete }) => {
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
-  }
+  };
 
   const removeButton = () => {
     if (blog.user.username === user.username) {
-      return <button onClick={(e) => handleDelete(e, blog)}>remove</button>
+      return <button onClick={(e) => handleDelete(e, blog)}>remove</button>;
     }
-  }
+  };
 
   return (
     <div style={blogStyle}>
@@ -29,9 +30,15 @@ const Blog = ({ blog, user, handleLike, handleDelete }) => {
           { removeButton() }
         </Togglable>
       </div>
-    </div> 
+    </div>
   );
-}
- 
+};
 
-export default Blog
+Blog.propTypes = {
+  blog: PropType.object.isRequired,
+  user: PropType.object.isRequired,
+  handleLike: PropType.func.isRequired,
+  handleDelete: PropType.func.isRequired
+};
+
+export default Blog;

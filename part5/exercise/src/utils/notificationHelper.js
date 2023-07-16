@@ -2,14 +2,14 @@ const showSuccess = (setState, message, duration=5000) => {
   setState(message);
   setTimeout(() => {
     setState(null);
-  }, duration)
+  }, duration);
 };
 
 const showError = (setState, message, duration=5000) => {
   setState(message);
   setTimeout(() => {
     setState(null);
-  }, duration)
+  }, duration);
 };
 
 export default { showSuccess, showError };
