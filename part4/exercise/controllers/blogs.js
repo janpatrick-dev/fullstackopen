@@ -36,11 +36,13 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
       url: body.url,
       likes: body.likes || 0
     });
-  
+
     user.blogs = [...user.blogs, blog];
     await user.save();
   
     const savedBlog = await blog.save();
+    savedBlog.user = user;
+
     response.status(201).json(savedBlog);
   } catch (exception) {
     response.status(500).json({ error: exception.message });
