@@ -13,7 +13,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs(blogs)
+      setBlogs(sortByLikesDesc(blogs))
     );  
   }, []);
 
@@ -25,6 +25,10 @@ const App = () => {
       loginService.setToken(savedUser.token);
     }
   }, [])
+
+  const sortByLikesDesc = (allBlogs) => {
+    return allBlogs.sort((a, b) => b.likes - a.likes);
+  };
 
   const handleLogin = async (e, username, password) => {
     e.preventDefault();
@@ -54,7 +58,7 @@ const App = () => {
     blogFormRef.current.toggleVisibility();
     try {
       const blog = await blogService.create(blogBody);
-      setBlogs([...blogs, blog]);
+      setBlogs(sortByLikesDesc([...blogs, blog]));
       NotifHelper.showSuccess(
         setSuccess, 
         `a new blog ${blog.title} by ${blog.author}`
@@ -81,7 +85,7 @@ const App = () => {
       return b
     });
 
-    setBlogs(updatedBlogs);
+    setBlogs(sortByLikesDesc(updatedBlogs));
   }
 
   if (user === null) {

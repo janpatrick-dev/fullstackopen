@@ -49,6 +49,21 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   }
 });
 
+blogsRouter.put('/:id', userExtractor, async (request, response) => {
+  try {
+    const { likes } = request.body;
+    const blog = await Blog.findByIdAndUpdate(
+      request.params.id,
+      { likes },
+      { new: true, runValidators: true, context: 'query' }
+    );
+
+    response.status(200).json(blog);
+  } catch (exception) {
+    response.status(500).json({ error: exception.message });
+  }
+});
+
 blogsRouter.delete('/:id', userExtractor, async (request, response) => {
   try {
     const currentUser = request.user;
