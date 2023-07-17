@@ -7,6 +7,8 @@ import Togglable from './Togglable';
 
 describe('<Blog />', () => {
   let container;
+  let handleDelete;
+  let handleLike;
 
   beforeEach(() => {
     const user = {
@@ -23,8 +25,8 @@ describe('<Blog />', () => {
       likes: 999
     };
 
-    const handleDelete = jest.fn();
-    const handleLike = jest.fn();
+    handleDelete = jest.fn();
+    handleLike = jest.fn();
 
     container = render(
       <Blog
@@ -57,5 +59,14 @@ describe('<Blog />', () => {
 
     const div = container.querySelector('.blogDetailsContent');
     expect(div).not.toHaveStyle('display: none');
+  });
+
+  test('5.15 when like button is clicked twice the event handler the component received as props is called twice', async () => {
+    const user = userEvent.setup();
+    const likeButton = screen.getByText('like');
+    await user.click(likeButton);
+    await user.click(likeButton);
+
+    expect(handleLike.mock.calls).toHaveLength(2);
   });
 });
