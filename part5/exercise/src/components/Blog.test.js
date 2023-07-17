@@ -46,15 +46,14 @@ describe('<Blog />', () => {
   });
 
   test('5.14 url and number of likes are shown when the view button is clicked', async () => {
-    let viewButtonText = screen.getByText('view');
-    expect(viewButtonText).toBeDefined();
+    let viewButton = screen.getByText('view');
+    expect(viewButton).toBeDefined();
 
     const user = userEvent.setup();
-    const viewButton = container.querySelector('.blogDisplayButton');
     await user.click(viewButton);
 
-    viewButtonText = screen.getByText('hide');
-    expect(viewButtonText).toBeDefined();
+    viewButton = screen.getByText('hide');
+    expect(viewButton).toBeDefined();
 
     const div = container.querySelector('.blogDetailsContent');
     expect(div).not.toHaveStyle('display: none');
