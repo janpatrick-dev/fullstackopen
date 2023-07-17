@@ -6,7 +6,8 @@ const CreateBlogForm = ({ handleCreateBlog }) => {
   const [url, setUrl] = useState('');
 
   const handleSubmit = (e) => {
-    handleCreateBlog(e, { title, author, url });
+    e.preventDefault();
+    handleCreateBlog({ title, author, url });
     setTitle('');
     setAuthor('');
     setUrl('');
@@ -23,6 +24,7 @@ const CreateBlogForm = ({ handleCreateBlog }) => {
             value={title}
             name='title'
             onChange={(e) => setTitle(e.target.value)}
+            placeholder='title'
           />
         </div>
         <div>
@@ -32,6 +34,7 @@ const CreateBlogForm = ({ handleCreateBlog }) => {
             value={author}
             name='author'
             onChange={(e) => setAuthor(e.target.value)}
+            placeholder='author'
           />
         </div>
         <div>
@@ -41,6 +44,7 @@ const CreateBlogForm = ({ handleCreateBlog }) => {
             value={url}
             name='url'
             onChange={(e) => setUrl(e.target.value)}
+            placeholder='url'
           />
         </div>
         <button type='submit'>create</button>
