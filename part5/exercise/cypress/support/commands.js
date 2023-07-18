@@ -47,3 +47,9 @@ Cypress.Commands.add('createBlog', ({ title, author, url }) => {
     cy.visit('http://localhost:3000');
   });
 });
+
+Cypress.Commands.add('likeBlog', (selector) => {
+  cy.get(selector).find('button').contains('view').click();
+  cy.get(selector).find('button').contains('like').click();
+  cy.get(selector).find('button').contains('hide').click();
+});

@@ -48,43 +48,119 @@ describe('Blog app', () => {
   describe('When logged in', function() {
     beforeEach(function() {
       cy.login({ username: 'johndoe', password: 'johndoe123' });
+    });
+
+    it('A blog can be created', function() {
       cy.createBlog({
         title: 'A Test Blog',
         author: 'John Doe',
         url: 'www.test.com'
       });
-    });
-
-    it('A blog can be created', function() {
       cy.contains('A Test Blog John Doe');
     });
 
-    it('A user can like a blog', function() {
-      cy.contains('A Test Blog').parent().find('button').as('blogParentButton');
-      cy.get('@blogParentButton').contains('view').click();
-      cy.get('@blogParentButton').contains('like').click();
+    describe('With a single blog', function() {
+      beforeEach(function() {
+        cy.createBlog({
+          title: 'A Test Blog',
+          author: 'John Doe',
+          url: 'www.test.com'
+        });
+      });
 
-      cy.get('[data-testid="blogLikes"]').should('contain', 'likes 1');
+      it('A user can like a blog', function() {
+        cy.contains('A Test Blog').parent().find('button').as('blogParentButton');
+        cy.get('@blogParentButton').contains('view').click();
+        cy.get('@blogParentButton').contains('like').click();
+
+        cy.get('[data-testid="blogLikes"]').should('contain', 'likes 1');
+      });
+
+      it('A user can delete their own created blogs', function() {
+        cy.contains('A Test Blog').parent().as('blogViewParent');
+        cy.get('@blogViewParent').find('button').contains('view').click();
+        cy.get('@blogViewParent').find('button').contains('remove').click();
+
+        cy.get('html').should('not.contain', 'A Test Blog');
+      });
+
+      it('A user can only see the delete button, not anyone else.', () => {
+        cy.contains('A Test Blog').as('blogView');
+        cy.get('@blogView').find('button').contains('view').click();
+        cy.get('@blogView').find('button').contains('remove');
+        cy.contains('John Doe logged in').find('button').contains('logout').click();
+
+        cy.login({ username: 'janedoe', password: 'janedoe123' });
+
+        cy.contains('Jane Doe logged in');
+        cy.get('@blogView').should('not.contain', '[data-testid="removeButton"');
+      });
     });
 
-    it('A user can delete their own created blogs', function() {
-      cy.contains('A Test Blog').parent().as('blogViewParent');
-      cy.get('@blogViewParent').find('button').contains('view').click();
-      cy.get('@blogViewParent').find('button').contains('remove').click();
+    describe('With many blogs', function() {
+      beforeEach(() => {
+        cy.login({ username: 'johndoe', password: 'johndoe123' });
+        const blogs = [
+          {
+            title: 'A Test Blog 1',
+            author: 'John Doe',
+            url: 'www.test.com'
+          },
+          {
+            title: 'A Test Blog 2',
+            author: 'John Doe',
+            url: 'www.test.com'
+          },
+          {
+            title: 'A Test Blog 3',
+            author: 'John Doe',
+            url: 'www.test.com'
+          }
+        ];
+        blogs.forEach(({ title, author, url }) => (
+          cy.createBlog({ title, author, url })
+        ));
+      });
 
-      cy.get('html').should('not.contain', 'A Test Blog');
-    });
+      it.only('Are ordered according to likes with the blog with the most likes being first', function() {
+        cy.contains('A Test Blog 1').as('blog1');
+        cy.contains('A Test Blog 2').as('blog2');
+        cy.contains('A Test Blog 3').as('blog3');
 
-    it.only('A user can only see the delete button, not anyone else.', () => {
-      cy.contains('A Test Blog').as('blogView');
-      cy.get('@blogView').find('button').contains('view').click();
-      cy.get('@blogView').find('button').contains('remove');
-      cy.contains('John Doe logged in').find('button').contains('logout').click();
+        cy.likeBlog('@blog1');
+        cy.get('@blog1').contains('likes 1');
 
-      cy.login({ username: 'janedoe', password: 'janedoe123' });
+        cy.get('.blog').eq(0).should('contain', 'A Test Blog 1');
 
-      cy.contains('Jane Doe logged in');
-      cy.get('@blogView').should('not.contain', '[data-testid="removeButton"');
+        cy.likeBlog('@blog2');
+        cy.get('@blog2').contains('likes 1');
+
+        cy.get('.blog').eq(0).should('contain', 'A Test Blog 1');
+        cy.get('.blog').eq(1).should('contain', 'A Test Blog 2');
+
+        cy.likeBlog('@blog2');
+        cy.get('@blog2').contains('likes 2');
+
+        cy.get('.blog').eq(0).should('contain', 'A Test Blog 2');
+        cy.get('.blog').eq(1).should('contain', 'A Test Blog 1');
+
+        cy.likeBlog('@blog3');
+        cy.get('@blog3').contains('likes 1');
+
+        cy.likeBlog('@blog3');
+        cy.get('@blog3').contains('likes 2');
+
+        cy.get('.blog').eq(0).should('contain', 'A Test Blog 2');
+        cy.get('.blog').eq(1).should('contain', 'A Test Blog 3');
+        cy.get('.blog').eq(2).should('contain', 'A Test Blog 1');
+
+        cy.likeBlog('@blog3');
+        cy.get('@blog3').contains('likes 3');
+
+        cy.get('.blog').eq(0).should('contain', 'A Test Blog 3');
+        cy.get('.blog').eq(1).should('contain', 'A Test Blog 2');
+        cy.get('.blog').eq(2).should('contain', 'A Test Blog 1');
+      });
     });
   });
 });
