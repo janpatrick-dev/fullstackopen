@@ -19,6 +19,7 @@ const Login = ({ handleLogin, error }) => {
         <div>
           username
           <input
+            id='username'
             type='text'
             value={username}
             name='username'
@@ -28,6 +29,7 @@ const Login = ({ handleLogin, error }) => {
         <div>
           password
           <input
+            id='password'
             type='password'
             value={password}
             name='password'
