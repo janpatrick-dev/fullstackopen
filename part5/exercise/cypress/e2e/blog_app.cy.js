@@ -49,5 +49,19 @@ describe('Blog app', () => {
       });
       cy.contains('A Test Blog John Doe');
     });
+
+    it.only('A user can like a blog', function() {
+      cy.createBlog({
+        title: 'A Test Blog',
+        author: 'John Doe',
+        url: 'www.test.com'
+      });
+
+      cy.contains('A Test Blog').parent().find('button').as('blogParentButton');
+      cy.get('@blogParentButton').contains('view').click();
+      cy.get('@blogParentButton').contains('like').click();
+
+      cy.get('[data-testid="blogLikes"]').should('contain', 'likes 1');
+    });
   });
 });

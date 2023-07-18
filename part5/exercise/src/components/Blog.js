@@ -23,8 +23,10 @@ const Blog = ({ blog, user, handleLike, handleDelete }) => {
         <Togglable buttonLabel='view' type='blog' className='blogTogglable'>
           <div>{ blog.url }</div>
           <div>
-            likes { blog.likes }
-            <button onClick={(e) => handleLike(e, blog)}>like</button>
+            <span data-testid='blogLikes'>
+              likes { blog.likes }
+              <button onClick={(e) => handleLike(e, blog)}>like</button>
+            </span>
           </div>
           <div>{ blog.user && blog.user.name }</div>
           { removeButton() }
