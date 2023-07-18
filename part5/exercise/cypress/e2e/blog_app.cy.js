@@ -50,7 +50,7 @@ describe('Blog app', () => {
       cy.contains('A Test Blog John Doe');
     });
 
-    it.only('A user can like a blog', function() {
+    it('A user can like a blog', function() {
       cy.createBlog({
         title: 'A Test Blog',
         author: 'John Doe',
@@ -62,6 +62,20 @@ describe('Blog app', () => {
       cy.get('@blogParentButton').contains('like').click();
 
       cy.get('[data-testid="blogLikes"]').should('contain', 'likes 1');
+    });
+
+    it('A user can delete their own created blogs', function() {
+      cy.createBlog({
+        title: 'A Test Blog',
+        author: 'John Doe',
+        url: 'www.test.com'
+      });
+
+      cy.contains('A Test Blog').parent().as('blogViewParent');
+      cy.get('@blogViewParent').find('button').contains('view').click();
+      cy.get('@blogViewParent').find('button').contains('remove').click();
+
+      cy.get('html').should('not.contain', 'A Test Blog');
     });
   });
 });
