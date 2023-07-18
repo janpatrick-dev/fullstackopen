@@ -12,7 +12,11 @@ const Blog = ({ blog, user, handleLike, handleDelete }) => {
 
   const removeButton = () => {
     if (blog.user.username === user.username) {
-      return <button onClick={(e) => handleDelete(e, blog)}>remove</button>;
+      return (
+        <button onClick={(e) => handleDelete(e, blog)} data-testid='removeButton'>
+          remove
+        </button>
+      );
     }
   };
 
