@@ -8,12 +8,10 @@ import LoginForm from './components/LoginForm';
 import Togglable from './components/Togglable';
 import NoteForm from './components/NoteForm';
 
-const App = (props) => {
+const App = () => {
   const [notes, setNotes] = useState([]);
   const [showAll, setShowAll] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -48,7 +46,7 @@ const App = (props) => {
           setErrorMessage(null);
         }, 5000);
       });
-  }
+  };
 
   const toggleImportanceOf = (id) => {
     const note = notes.find(n => n.id === id);
@@ -59,7 +57,7 @@ const App = (props) => {
       .then((returnedNote) => {
         setNotes(notes.map(n => n.id !== id ? n : returnedNote));
       })
-      .catch((error) => {
+      .catch(() => {
         setErrorMessage(
           `Note '${note.content}' was already removed from the server`
         );

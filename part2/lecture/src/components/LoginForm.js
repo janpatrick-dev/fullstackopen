@@ -10,17 +10,18 @@ const LoginForm = ({
 
   const handleLogin = (e) => {
     e.preventDefault();
-    
+
     handleSubmit({ username, password });
     setUsername('');
     setPassword('');
-  }
+  };
 
   return (
     <form onSubmit={handleLogin}>
       <div>
         username
         <input
+          id='username'
           type="text"
           value={username}
           name="username"
@@ -30,16 +31,19 @@ const LoginForm = ({
       <div>
         password
         <input
+          id='password'
           type="password"
           value={password}
           name="password"
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      <button type="submit">login</button>
+      <button id='login-button' type="submit">
+        login
+      </button>
     </form>
   );
-}
+};
 
 LoginForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired
