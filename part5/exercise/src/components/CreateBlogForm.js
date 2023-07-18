@@ -20,6 +20,7 @@ const CreateBlogForm = ({ handleCreateBlog }) => {
         <div>
           title:
           <input
+            id='title'
             type='text'
             value={title}
             name='title'
@@ -30,6 +31,7 @@ const CreateBlogForm = ({ handleCreateBlog }) => {
         <div>
           author:
           <input
+            id='author'
             type='text'
             value={author}
             name='author'
@@ -40,6 +42,7 @@ const CreateBlogForm = ({ handleCreateBlog }) => {
         <div>
           url:
           <input
+            id='url'
             type='text'
             value={url}
             name='url'
@@ -47,7 +50,9 @@ const CreateBlogForm = ({ handleCreateBlog }) => {
             placeholder='url'
           />
         </div>
-        <button type='submit'>create</button>
+        <button type='submit' data-testid='createBlogButton'>
+          create
+        </button>
       </form>
     </div>
   );

@@ -41,7 +41,6 @@ const App = () => {
       setUser(user);
       NotifHelper.showSuccess(setSuccess, `Hello, ${user.name}`);
     } catch (exception) {
-      console.error(exception);
       NotifHelper.showError(setError, exception.response.data.error);
     }
   };

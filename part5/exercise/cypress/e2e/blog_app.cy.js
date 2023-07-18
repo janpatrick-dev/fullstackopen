@@ -20,8 +20,7 @@ describe('Blog app', () => {
     it('succeeds with correct credentials', function() {
       cy.get('#username').type('johndoe');
       cy.get('#password').type('johndoe123');
-      cy.contains('login').click();
-
+      cy.get('[data-testid="loginButton"').click();
       cy.contains('John Doe logged in');
     });
 
@@ -34,6 +33,21 @@ describe('Blog app', () => {
         .should('contain', 'invalid credentials')
         .and('have.css', 'color', 'rgb(255, 0, 0)')
         .and('have.css', 'border-style', 'solid');
+    });
+  });
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.login({ username: 'johndoe', password: 'johndoe123' });
+    });
+
+    it('A blog can be created', function() {
+      cy.createBlog({
+        title: 'A Test Blog',
+        author: 'John Doe',
+        url: 'www.test.com'
+      });
+      cy.contains('A Test Blog John Doe');
     });
   });
 });

@@ -36,7 +36,9 @@ const Login = ({ handleLogin, error }) => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type='submit'>login</button>
+        <button type='submit' data-testid='loginButton'>
+          login
+        </button>
       </form>
     </div>
   );
