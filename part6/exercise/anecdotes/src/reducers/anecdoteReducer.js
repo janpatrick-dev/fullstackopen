@@ -26,9 +26,11 @@ const reducer = (state = initialState, action) => {
     case 'NEW_ANECDOTE':
       return [...state, action.payload];
     case 'VOTE':
+      const { id } = action.payload;
+      const target = state.find((anecdote) => anecdote.id === id);
       return state.map((anecdote) => {
-        if (anecdote.id === action.payload.id) {
-          anecdote.votes = anecdote.votes + 1;
+        if (anecdote.id === id) {
+          return { ...target, votes: target.votes + 1 };
         }
         return anecdote;
       });
