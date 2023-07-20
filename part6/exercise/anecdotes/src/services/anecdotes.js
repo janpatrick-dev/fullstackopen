@@ -13,4 +13,12 @@ const createAnecdote = async (content) => {
   return response.data;
 }
 
-export default { getAll, createAnecdote };
+const incrementVoteOf = async (id) => {
+  const anecdotes = await getAll();
+  const target = anecdotes.find((a) => a.id === id);
+  const body = { ...target, votes: target.votes + 1 };
+  const response = await axios.put(`${baseUrl}/${id}`, body, { new: true });
+  return response.data;
+}
+
+export default { getAll, createAnecdote, incrementVoteOf };
