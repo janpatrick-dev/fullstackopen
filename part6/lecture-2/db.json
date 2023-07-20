@@ -1,0 +1,24 @@
+{
+  "notes": [
+    {
+      "content": "react query simplifies the communication with backend",
+      "important": true,
+      "id": 1
+    },
+    {
+      "content": "useReduce with context is an alternative way for data management",
+      "important": true,
+      "id": 2
+    },
+    {
+      "content": "qwe",
+      "important": false,
+      "id": 3
+    },
+    {
+      "content": "test",
+      "important": true,
+      "id": 4
+    }
+  ]
+}
