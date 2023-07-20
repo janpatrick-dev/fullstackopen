@@ -11,4 +11,10 @@ export const createAnecdote = (newAnecdote) => {
     throw new Error('content must be at least 5 characters long!');
   }
   return axios.post(baseUrl, newAnecdote).then((res) => res.data)
-}
+};
+
+export const updateAnecdote = (updatedAnecdote) => (
+  axios
+    .put(`${baseUrl}/${updatedAnecdote.id}`, updatedAnecdote, { new: true })
+    .then((res) => res.data)
+);
