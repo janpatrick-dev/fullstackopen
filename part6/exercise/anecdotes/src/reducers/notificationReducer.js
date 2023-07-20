@@ -1,22 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  message: 'Full Stack Open - Part 6!!',
-  show: false
+  message: ''
 };
 
 const notificationSlice = createSlice({
   name: 'notifications',
   initialState,
   reducers: {
-    setMessage(state, action) {
-      return { ...state, message: action.payload }
-    },
     showNotification(state, action) {
-      return { ...state, show: action.payload }
+      return { message: action.payload };
+    },
+    clearNotification(state, action) {
+      return { message: '' };
     }
   }
 });
 
-export const { setMessage, showNotification } = notificationSlice.actions;
+export const { showNotification, clearNotification } = notificationSlice.actions;
+
+export const setNotification = (message, duration) => {
+  return async (dispatch) => {
+    dispatch(showNotification(message));
+    setTimeout(() => {
+      dispatch(clearNotification());
+    }, duration * 1000);
+  };
+}
+
 export default notificationSlice.reducer;
