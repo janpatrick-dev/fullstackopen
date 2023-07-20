@@ -8,6 +8,7 @@ const anecdoteSlice = createSlice({
       return action.payload;
     },
     createAnecdote(state, action) {
+      console.log(action.payload);
       return [...state, action.payload];
     },
     incrementVoteOf(state, action) {
