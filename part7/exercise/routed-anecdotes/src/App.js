@@ -132,6 +132,7 @@ const App = () => {
         <Route path='/create' element={<CreateNew addNew={addNew} />} />
         <Route path='/about' element={<About />} />
       </Routes>
+      <Footer />
     </div>
   )
 }
