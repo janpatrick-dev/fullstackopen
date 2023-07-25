@@ -75,9 +75,10 @@ const CreateNew = (props) => {
   }
 
   const handleReset = () => {
-    content.reset();
-    author.reset();
-    info.reset();
+    const emptyEvent = { target: { value: '' } };
+    content.onChange(emptyEvent);
+    author.onChange(emptyEvent);
+    info.onChange(emptyEvent);
   }
 
   return (
