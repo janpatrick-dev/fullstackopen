@@ -1,5 +1,37 @@
 import { useState }  from 'react'
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useParams, Navigate, useMatch } from 'react-router-dom';
+import { Paper, TableBody, TableCell, TableContainer, TableRow, TextField, Button, Table, Alert, AppBar, Toolbar, IconButton } from '@mui/material';
+
+import styled from 'styled-components';
+
+const Btn = styled.button`
+  background: Bisque;
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid Chocolate;
+  border-radius: 3px;
+`;
+
+const Input = styled.input`
+  margin: 0.25em;
+`;
+
+const Page = styled.div`
+  padding: 1em;
+  background: papayawhip;
+`;
+
+const Navigation = styled.div`
+  background: BurlyWood;
+  padding: 1em;
+`;
+
+const Footer = styled.div`
+  background: Chocolate;
+  padding: 1em;
+  margin-top: 1em;
+`;
 
 const Home = () => (
   <div> <h2>TKTL notes app</h2> </div>
@@ -18,13 +50,22 @@ const Note = ({ note }) => {
 const Notes = ({ notes }) => (
   <div>
     <h2>Notes</h2>
-    <ul>
-      {notes.map((note) => (
-        <li key={note.id}>
-          <Link to={`/notes/${note.id}`}>{note.content}</Link>
-        </li>
-      ))}
-    </ul>
+    <TableContainer component={Paper}>
+      <Table style={{ marginBottom: 0 }}>
+        <TableBody>
+          {notes.map((note) => (
+            <TableRow key={note.id}>
+              <TableCell>
+                <Link to={`/notes/${note.id}`}>{note.content}</Link>
+              </TableCell>
+              <TableCell>
+                {note.user}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   </div>
 )
 
@@ -46,12 +87,14 @@ const Login = (props) => {
       <h2>login</h2>
       <form onSubmit={onSubmit}>
         <div>
-          username: <input />
+          username:
+          <Input />
         </div>
         <div>
-          password: <input type='password' />
+          password:
+          <Input type='password' />
         </div>
-        <button type="submit">login</button>
+        <Btn type='submit' primary=''>login</Btn>
       </form>
     </div>
   )
@@ -80,9 +123,14 @@ const App = () => {
   ])
 
   const [user, setUser] = useState(null)
+  const [message, setMessage] = useState(null)
 
   const login = (user) => {
     setUser(user)
+    setMessage(`welcome ${user}`)
+    setTimeout(() => {
+      setMessage(null)
+    }, 10000)
   }
 
   const padding = {
@@ -95,8 +143,9 @@ const App = () => {
     : null;
 
   return (
-    <div>
-      <div>
+    <Page>
+
+      <Navigation>
         <Link style={padding} to='/'>home</Link>
         <Link style={padding} to='/notes'>notes</Link>
         <Link style={padding} to='/users'>users</Link>
@@ -104,7 +153,7 @@ const App = () => {
           ? <em>{user} logged in</em>
           : <Link style={padding} to='/login'>login</Link>
         }
-      </div>
+      </Navigation>
 
       <Routes>
         <Route path='/notes/:id' element={<Note note={note} />} />
@@ -114,11 +163,10 @@ const App = () => {
         <Route path='/' element={<Home />} />
       </Routes>
 
-      <footer>
-        <br />
+      <Footer>
         <em>Note app, Department of Computer Science 2023</em>
-      </footer>
-    </div>
+      </Footer>
+    </Page>
   )
 }
 
