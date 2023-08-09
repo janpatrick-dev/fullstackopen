@@ -5,7 +5,7 @@ import { setNotification } from '../reducers/notificationReducer';
 
 const CreateBlogForm = ({ blogFormRef }) => {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user);
+  const user = useSelector(state => state.users.user);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');

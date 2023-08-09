@@ -5,7 +5,7 @@ import { deleteBlog, incrementBlogLikes } from '../reducers/blogsReducer';
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user);
+  const user = useSelector(state => state.users.user);
 
   const blogStyle = {
     paddingTop: 10,
