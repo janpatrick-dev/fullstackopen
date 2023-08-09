@@ -1,22 +1,25 @@
-import { useState, useEffect, useRef } from "react";
-import loginService from "./services/login";
-import blogService from "./services/blogs";
-import Blogs from "./components/Blogs";
-import Login from "./components/Login";
-import NotifHelper from "./utils/notificationHelper";
+import { useState, useEffect, useRef } from 'react';
+import loginService from './services/login';
+import blogService from './services/blogs';
+import Blogs from './components/Blogs';
+import Login from './components/Login';
+import { setNotification } from './reducers/notificationReducer';
+import { useDispatch, useSelector } from 'react-redux';
 
 const App = () => {
+  const dispatch = useDispatch();
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const success = useSelector(state => state.notification.success);
+  const error = useSelector(state => state.notification.error);
 
   useEffect(() => {
+    console.log(success);
     blogService.getAll().then((blogs) => setBlogs(sortByLikesDesc(blogs)));
   }, []);
 
   useEffect(() => {
-    const savedUserJSON = localStorage.getItem("currentUser");
+    const savedUserJSON = localStorage.getItem('currentUser');
     if (savedUserJSON) {
       const savedUser = JSON.parse(savedUserJSON);
       setUser(savedUser);
@@ -34,17 +37,17 @@ const App = () => {
     try {
       const user = await loginService.login({ username, password });
 
-      window.localStorage.setItem("currentUser", JSON.stringify(user));
+      window.localStorage.setItem('currentUser', JSON.stringify(user));
       loginService.setToken(user.token);
       setUser(user);
-      NotifHelper.showSuccess(setSuccess, `Hello, ${user.name}`);
+      dispatch(setNotification(`Hello, ${user.name}`));
     } catch (exception) {
-      NotifHelper.showError(setError, exception.response.data.error);
+      dispatch(setNotification(exception.response.data.error, false));
     }
   };
 
   const handleLogout = () => {
-    window.localStorage.removeItem("currentUser");
+    window.localStorage.removeItem('currentUser');
     setUser(null);
   };
 
@@ -54,12 +57,9 @@ const App = () => {
     try {
       const blog = await blogService.create(blogBody);
       setBlogs(sortByLikesDesc([...blogs, blog]));
-      NotifHelper.showSuccess(
-        setSuccess,
-        `a new blog ${blog.title} by ${blog.author}`,
-      );
+      dispatch(setNotification(`a new blog ${blog.title} by ${blog.author}`));
     } catch (exception) {
-      NotifHelper.showError(setError, exception.message);
+      dispatch(setNotification(exception.message, false));
     }
   };
 
