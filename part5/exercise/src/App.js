@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
-import loginService from './services/login';
-import blogService from './services/blogs';
-import Blogs from './components/Blogs';
-import Login from './components/Login';
-import NotifHelper from './utils/notificationHelper';
+import { useState, useEffect, useRef } from "react";
+import loginService from "./services/login";
+import blogService from "./services/blogs";
+import Blogs from "./components/Blogs";
+import Login from "./components/Login";
+import NotifHelper from "./utils/notificationHelper";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -12,13 +12,11 @@ const App = () => {
   const [success, setSuccess] = useState(null);
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(sortByLikesDesc(blogs))
-    );
+    blogService.getAll().then((blogs) => setBlogs(sortByLikesDesc(blogs)));
   }, []);
 
   useEffect(() => {
-    const savedUserJSON = localStorage.getItem('currentUser');
+    const savedUserJSON = localStorage.getItem("currentUser");
     if (savedUserJSON) {
       const savedUser = JSON.parse(savedUserJSON);
       setUser(savedUser);
@@ -36,7 +34,7 @@ const App = () => {
     try {
       const user = await loginService.login({ username, password });
 
-      window.localStorage.setItem('currentUser', JSON.stringify(user));
+      window.localStorage.setItem("currentUser", JSON.stringify(user));
       loginService.setToken(user.token);
       setUser(user);
       NotifHelper.showSuccess(setSuccess, `Hello, ${user.name}`);
@@ -46,7 +44,7 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    window.localStorage.removeItem('currentUser');
+    window.localStorage.removeItem("currentUser");
     setUser(null);
   };
 
@@ -58,7 +56,7 @@ const App = () => {
       setBlogs(sortByLikesDesc([...blogs, blog]));
       NotifHelper.showSuccess(
         setSuccess,
-        `a new blog ${blog.title} by ${blog.author}`
+        `a new blog ${blog.title} by ${blog.author}`,
       );
     } catch (exception) {
       NotifHelper.showError(setError, exception.message);
@@ -70,7 +68,7 @@ const App = () => {
 
     const updatedBlog = {
       ...blog,
-      likes: blog.likes + 1
+      likes: blog.likes + 1,
     };
 
     await blogService.update(blog.id, updatedBlog);
