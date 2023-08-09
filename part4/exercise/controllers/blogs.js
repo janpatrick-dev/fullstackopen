@@ -38,10 +38,12 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
     });
 
     const savedBlog = await blog.save();
-    user.blogs = [...user.blogs, blog];
+    user.blogs = [...user.blogs, savedBlog];
     await user.save();
 
-    response.status(201).json(savedBlog);
+    const populatedBlog = await savedBlog.populate('user', { username: 1, name: 1 });
+    
+    response.status(201).json(populatedBlog);
   } catch (exception) {
     response.status(500).json({ error: exception.message });
   }
@@ -58,6 +60,15 @@ blogsRouter.put('/:id', userExtractor, async (request, response) => {
 
     response.status(200).json(blog);
   } catch (exception) {
+    response.status(500).json({ error: exception.message });
+  }
+});
+
+blogsRouter.delete('/', async (request, response) => {
+  try {
+    await Blog.deleteMany({});
+  } catch (exception) {
+    console.log('asdasd');
     response.status(500).json({ error: exception.message });
   }
 });

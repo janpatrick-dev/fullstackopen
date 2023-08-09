@@ -1,13 +1,28 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { createNewBlog } from '../reducers/blogsReducer';
+import { setNotification } from '../reducers/notificationReducer';
 
-const CreateBlogForm = ({ handleCreateBlog }) => {
+const CreateBlogForm = ({ blogFormRef }) => {
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
 
+  const handleCreate = async (blogBody) => {
+    blogFormRef.current.toggleVisibility();
+    try {
+      const blog = await dispatch(createNewBlog({ ...blogBody, user: user }));
+      dispatch(setNotification(`a new blog ${blog.title} by ${blog.author}`));
+    } catch (exception) {
+      dispatch(setNotification(exception.message, false));
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleCreateBlog({ title, author, url });
+    handleCreate({ title, author, url });
     setTitle('');
     setAuthor('');
     setUrl('');

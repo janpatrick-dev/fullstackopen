@@ -1,13 +1,30 @@
 import PropType from 'prop-types';
 import Togglable from './Togglable';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteBlog, incrementBlogLikes } from '../reducers/blogsReducer';
 
-const Blog = ({ blog, user, handleLike, handleDelete }) => {
+const Blog = ({ blog }) => {
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
+  };
+
+  const handleLike = async (e, blog) => {
+    e.preventDefault();
+
+    await dispatch(incrementBlogLikes(blog));
+  };
+
+  const handleDelete = async (e, blogToDelete) => {
+    e.preventDefault();
+
+    await dispatch(deleteBlog(blogToDelete));
   };
 
   const removeButton = () => {
@@ -42,9 +59,6 @@ const Blog = ({ blog, user, handleLike, handleDelete }) => {
 
 Blog.propTypes = {
   blog: PropType.object.isRequired,
-  user: PropType.object.isRequired,
-  handleLike: PropType.func.isRequired,
-  handleDelete: PropType.func.isRequired
 };
 
 export default Blog;
