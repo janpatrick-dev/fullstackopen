@@ -1,41 +1,29 @@
-import Blog from './Blog';
-import Notification from './Notification';
+import BlogRow from './BlogRow';
 import CreateBlogForm from './CreateBlogForm';
 import Togglable from './Togglable';
+import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { initializeBlogs } from '../reducers/blogsReducer';
 
-const Blogs = (props) => {
-  const {
-    blogs,
-    user,
-    handleLogout,
-    handleCreateBlog,
-    handleLike,
-    handleDelete,
-    blogFormRef,
-    error,
-    success
-  } = props;
+const Blogs = () => {
+  const dispatch = useDispatch();
+  const blogs = useSelector(state => state.blogs);
+
+  const blogFormRef = useRef();
+
+  useEffect(() => {
+    dispatch(initializeBlogs());
+  }, []);
 
   return (
     <div>
-      <h2>blogs</h2>
-      <Notification
-        className={error ? 'error' : 'success'}
-        message={error || success} />
-      <p>
-        {user.name} logged in
-        <button onClick={handleLogout}>logout</button>
-      </p>
       <Togglable buttonLabel='new note' ref={blogFormRef}>
-        <CreateBlogForm handleCreateBlog={handleCreateBlog} />
+        <CreateBlogForm blogFormRef={blogFormRef} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog
+        <BlogRow
           key={blog.id}
           blog={blog}
-          user={user}
-          handleLike={handleLike}
-          handleDelete={handleDelete}
         />
       )}
     </div>

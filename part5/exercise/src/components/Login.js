@@ -1,14 +1,27 @@
 import { useState } from 'react';
 import Notification from './Notification';
+import { useDispatch, useSelector } from 'react-redux';
+import { setNotification } from '../reducers/notificationReducer';
+import { loginUser } from '../reducers/userReducer';
 
-const Login = ({ handleLogin, error }) => {
+const Login = () => {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const error = useSelector(state => state.notification.error);
+
+  const handleLogin = async (username, password) => {
+    try {
+      const loggedInUser = await dispatch(loginUser({ username, password }));
+      dispatch(setNotification(`Hello, ${loggedInUser.name}`));
+    } catch (exception) {
+      dispatch(setNotification(exception.response.data.error, false));
+    }
+  };
 
   const handleSubmit = (e) => {
-    handleLogin(e, username, password);
-    setUsername('');
-    setPassword('');
+    e.preventDefault();
+    handleLogin(username, password);
   };
 
   return (
