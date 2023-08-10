@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewBlog } from '../reducers/blogsReducer';
 import { setNotification } from '../reducers/notificationReducer';
+import { Button, TextField } from '@mui/material';
+
 
 const CreateBlogForm = ({ blogFormRef }) => {
   const dispatch = useDispatch();
@@ -32,42 +34,42 @@ const CreateBlogForm = ({ blogFormRef }) => {
     <div>
       <h2>create new</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          title:
-          <input
-            id='title'
-            type='text'
-            value={title}
-            name='title'
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder='title'
-          />
-        </div>
-        <div>
-          author:
-          <input
-            id='author'
-            type='text'
-            value={author}
-            name='author'
-            onChange={(e) => setAuthor(e.target.value)}
-            placeholder='author'
-          />
-        </div>
-        <div>
-          url:
-          <input
-            id='url'
-            type='text'
-            value={url}
-            name='url'
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder='url'
-          />
-        </div>
-        <button type='submit' data-testid='createBlogButton'>
+        <TextField
+          id="outlined-basic"
+          label="Title"
+          variant="outlined"
+          type='text'
+          value={title}
+          name='title'
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder='title'
+        />
+        <br />
+        <TextField
+          id="outlined-basic"
+          label="Author"
+          variant="outlined"
+          type='text'
+          value={author}
+          name='author'
+          onChange={(e) => setAuthor(e.target.value)}
+          placeholder='author'
+        />
+        <br />
+        <TextField
+          id="outlined-basic"
+          label="URL"
+          variant="outlined"
+          type='text'
+          value={url}
+          name='url'
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder='url'
+        />
+        <br />
+        <Button type='submit' variant='contained'>
           create
-        </button>
+        </Button>
       </form>
     </div>
   );
