@@ -32,4 +32,12 @@ const remove = async (id) => {
   return response.data;
 };
 
-export default { getAll, create, update, remove };
+const addComment = async (id, message) => {
+  const config = {
+    headers: { Authorization: loginService.getToken() }
+  };
+  const response = await axios.post(`${baseUrl}/${id}/comments`, { message }, config);
+  return response.data;
+};
+
+export default { getAll, create, update, remove, addComment };

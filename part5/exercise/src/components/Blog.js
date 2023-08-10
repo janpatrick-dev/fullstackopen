@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { initializeUsers } from '../reducers/userReducer';
-import { incrementBlogLikes } from '../reducers/blogsReducer';
+import { addComment, incrementBlogLikes } from '../reducers/blogsReducer';
 
 const Blog = () => {
   const { id } = useParams();
@@ -11,6 +11,7 @@ const Blog = () => {
   const users = useSelector(state => state.users.allUsers);
 
   const [blog, setBlog] = useState(null);
+  const [comment, setComment] = useState('');
 
   const handleLike = async (e) => {
     e.preventDefault();
@@ -18,6 +19,18 @@ const Blog = () => {
     const updatedBlog = await dispatch(incrementBlogLikes(blog));
     console.log(updatedBlog);
     setBlog({ ...blog, likes: updatedBlog.likes });
+  };
+
+  const handleInputChange = (e) => {
+    setComment(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const newComment = await dispatch(addComment(blog, comment));
+    setBlog({ ...blog, comments: [...blog.comments, newComment] });
+    setComment('');
   };
 
   useEffect(() => {
@@ -49,6 +62,10 @@ const Blog = () => {
         added by {user.name}
       </div>
       <h3>comments</h3>
+      <form onSubmit={handleSubmit}>
+        <input onChange={handleInputChange} value={comment} />
+        <button>add comment</button>
+      </form>
       {blog.comments && blog.comments.map((comment) =>
         <li key={comment.id}>{comment.message}</li>
       )}

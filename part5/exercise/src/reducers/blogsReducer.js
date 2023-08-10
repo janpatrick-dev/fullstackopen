@@ -67,4 +67,10 @@ export const deleteBlog = (blog) => {
   };
 };
 
+export const addComment = (blog, message) => {
+  return async () => {
+    return await blogService.addComment(blog.id, message);
+  };
+};
+
 export default blogsSlice.reducer;
