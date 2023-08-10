@@ -7,6 +7,7 @@ import { initializeUser, logoutUser } from './reducers/userReducer';
 import Notification from './components/Notification';
 import Users from './components/Users';
 import User from './components/User';
+import Blog from './components/Blog';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ const App = () => {
       </p>
       <Routes>
         <Route path='/' element={<Blogs />} />
+        <Route path='/blogs/:id' element={<Blog />} />
         <Route path='/users' element={<Users />} />
         <Route path='/users/:id' element={<User />} />
       </Routes>

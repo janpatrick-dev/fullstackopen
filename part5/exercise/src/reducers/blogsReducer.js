@@ -46,13 +46,13 @@ export const createNewBlog = (body) => {
 };
 
 export const incrementBlogLikes = (blog) => {
-  return async (dispatch) => {
+  return async () => {
     const updateBody = {
       ...blog,
       likes: blog.likes + 1,
     };
     const updatedBlog = await blogService.update(blog.id, updateBody);
-    dispatch(updateBlog(updatedBlog));
+    return updatedBlog;
   };
 };
 

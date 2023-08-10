@@ -56,7 +56,7 @@ blogsRouter.put('/:id', userExtractor, async (request, response) => {
       request.params.id,
       { likes },
       { new: true, runValidators: true, context: 'query' }
-    );
+    ).populate('user', { username: 1, name: 1 });
 
     response.status(200).json(blog);
   } catch (exception) {

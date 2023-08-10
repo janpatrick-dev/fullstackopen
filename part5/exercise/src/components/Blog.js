@@ -1,64 +1,55 @@
-import PropType from 'prop-types';
-import Togglable from './Togglable';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteBlog, incrementBlogLikes } from '../reducers/blogsReducer';
+import { useParams } from 'react-router-dom';
+import { initializeUsers } from '../reducers/userReducer';
+import { incrementBlogLikes } from '../reducers/blogsReducer';
 
-const Blog = ({ blog }) => {
+const Blog = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const user = useSelector(state => state.users.user);
+  const blogs = useSelector(state => state.blogs);
+  const users = useSelector(state => state.users.allUsers);
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  };
+  const [blog, setBlog] = useState(null);
 
-  const handleLike = async (e, blog) => {
+  const handleLike = async (e) => {
     e.preventDefault();
 
-    await dispatch(incrementBlogLikes(blog));
+    const updatedBlog = await dispatch(incrementBlogLikes(blog));
+    console.log(updatedBlog);
+    setBlog(updatedBlog);
   };
 
-  const handleDelete = async (e, blogToDelete) => {
-    e.preventDefault();
+  useEffect(() => {
+    dispatch(initializeUsers());
+  }, []);
 
-    await dispatch(deleteBlog(blogToDelete));
-  };
+  useEffect(() => {
+    setBlog(blogs.find(b => b.id === id));
+  }, [users]);
 
-  const removeButton = () => {
-    if (blog.user.username === user.username) {
-      return (
-        <button onClick={(e) => handleDelete(e, blog)} data-testid='removeButton'>
-          remove
-        </button>
-      );
-    }
-  };
+  if (!blog) {
+    return null;
+  }
+
+  const user = users.find(user => user.id === blog.user.id);
+
+  if (!user) {
+    return null;
+  }
 
   return (
-    <div style={blogStyle} className='blog'>
+    <div>
+      <h2>{blog.title} {blog.author}</h2>
+      <a href={blog.url}>{blog.url}</a>
       <div>
-        {blog.title} {blog.author}
-        <Togglable buttonLabel='view' type='blog' className='blogTogglable'>
-          <div>{ blog.url }</div>
-          <div>
-            <span data-testid='blogLikes'>
-              likes { blog.likes }
-              <button onClick={(e) => handleLike(e, blog)}>like</button>
-            </span>
-          </div>
-          <div>{ blog.user && blog.user.name }</div>
-          { removeButton() }
-        </Togglable>
+        {blog.likes} likes <button onClick={handleLike}>like</button>
+      </div>
+      <div>
+        added by {user.name}
       </div>
     </div>
   );
-};
-
-Blog.propTypes = {
-  blog: PropType.object.isRequired,
 };
 
 export default Blog;

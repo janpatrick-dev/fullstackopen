@@ -1,4 +1,4 @@
-import Blog from './Blog';
+import BlogRow from './BlogRow';
 import CreateBlogForm from './CreateBlogForm';
 import Togglable from './Togglable';
 import { useEffect, useRef } from 'react';
@@ -21,7 +21,7 @@ const Blogs = () => {
         <CreateBlogForm blogFormRef={blogFormRef} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog
+        <BlogRow
           key={blog.id}
           blog={blog}
         />
