@@ -17,7 +17,7 @@ const Blog = () => {
 
     const updatedBlog = await dispatch(incrementBlogLikes(blog));
     console.log(updatedBlog);
-    setBlog(updatedBlog);
+    setBlog({ ...blog, likes: updatedBlog.likes });
   };
 
   useEffect(() => {
@@ -48,6 +48,10 @@ const Blog = () => {
       <div>
         added by {user.name}
       </div>
+      <h3>comments</h3>
+      {blog.comments && blog.comments.map((comment) =>
+        <li key={comment.id}>{comment.message}</li>
+      )}
     </div>
   );
 };

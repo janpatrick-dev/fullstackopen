@@ -1,13 +1,15 @@
 const blogsRouter = require('express').Router();
 const Blog = require('../models/blog');
 const User = require('../models/user');
+const Comment = require('../models/comment');
 const { userExtractor } = require('../utils/middleware');
 
 blogsRouter.get('/', async (request, response, next) => {
   try {
     const blogs = await Blog
       .find({})
-      .populate('user', { username: 1, name: 1 });
+      .populate('user', { username: 1, name: 1 })
+      .populate('comments', { message: 1 });
     response.json(blogs);
   } catch (exception) {
     next(exception);
@@ -47,6 +49,25 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   } catch (exception) {
     response.status(500).json({ error: exception.message });
   }
+});
+
+blogsRouter.post('/:id/comments', userExtractor, async (request, response) => {
+  try {
+    const id = request.params.id;
+    const { message } = request.body;
+    const comment = await Comment.create({ message, blog: id });
+    const blog = await Blog.findById(id);
+    blog.comments = blog.comments ? [...blog.comments, comment.id] : [comment.id];
+    await blog.save();
+
+    response.status(201).json(comment);
+  } catch (exception) {
+    response.status(500).json({ error: exception.message });
+  }
+});
+
+blogsRouter.delete('/comments', async (request, response) => {
+  await Comment.deleteMany({});
 });
 
 blogsRouter.put('/:id', userExtractor, async (request, response) => {
