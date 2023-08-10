@@ -17,7 +17,6 @@ const Blog = () => {
     e.preventDefault();
 
     const updatedBlog = await dispatch(incrementBlogLikes(blog));
-    console.log(updatedBlog);
     setBlog({ ...blog, likes: updatedBlog.likes });
   };
 
