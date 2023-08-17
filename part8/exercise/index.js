@@ -107,15 +107,7 @@ const typeDefs = `
 const resolvers = {
   Query: {
     bookCount: () => books.length,
-    authorCount: () => {
-      const uniqueAuthors = [];
-      books.forEach((b) => {
-        if (!uniqueAuthors.includes(b.author)) {
-          uniqueAuthors.push(b.author);
-        }
-      });
-      return uniqueAuthors.length;
-    }
+    authorCount: () => authors.length
   }
 }
 
