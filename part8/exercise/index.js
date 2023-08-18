@@ -116,7 +116,7 @@ const typeDefs = `
     editAuthor(
       name: String!,
       setBornTo: Int!
-    ): Author!
+    ): Author
   }
 
   type Book {
@@ -179,11 +179,15 @@ const resolvers = {
       return newBook;
     },
     editAuthor: (root, args) => {
-      let updatedAuthor = authors.find((a) => a.name === args.name);
-      updatedAuthor = { ...updatedAuthor, born: args.setBornTo };
-      
-      authors = authors.map((a) => a.name === args.name ? updatedAuthor : a);
-      return updatedAuthor;
+      let author = authors.find((a) => a.name === args.name);
+
+      if (!author) {
+        return null;
+      }
+
+      author = { ...author, born: args.setBornTo };
+      authors = authors.map((a) => a.name === args.name ? author : a);
+      return author;
     }
   }
 }
