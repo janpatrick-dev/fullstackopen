@@ -193,8 +193,6 @@ const resolvers = {
       const author = await Author.findOne({ name: args.author });
       const newBook = new Book({ ...args, author });
 
-      console.log(context);
-
       if (!context.currentUser) {
         throw new GraphQLError('Not authenticated', {
           extensions: {
@@ -251,6 +249,7 @@ const resolvers = {
 
       author.born = args.setBornTo;
       await author.save();
+
       return author;
     },
     createUser: async (root, args) => {

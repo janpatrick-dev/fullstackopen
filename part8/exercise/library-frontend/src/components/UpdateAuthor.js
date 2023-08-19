@@ -6,8 +6,19 @@ import Select from "react-select";
 const UpdateAuthor = ({ authors }) => {
   const [name, setName] = useState(null);
   const [born, setBorn] = useState('');
-  const [ editAuthor ] = useMutation(EDIT_AUTHOR, {
-    refetchQueries: [ { query: ALL_AUTHORS }]
+  const [ editAuthor, result ] = useMutation(EDIT_AUTHOR, {
+    update: (cache, response) => {
+      cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {
+        return {
+          allAuthors: allAuthors.map(a => {
+            if (a.name === response.data.editAuthor.name) {
+              return response.data.editAuthor;
+            }
+            return a;
+          })
+        }
+      });
+    }
   });
 
   const options = authors.map((a) => {
@@ -21,7 +32,6 @@ const UpdateAuthor = ({ authors }) => {
     e.preventDefault();
 
     editAuthor({ variables: { name: name.value, setBornTo: Number(born) } });
-    setName('');
     setBorn('');
   }
 
