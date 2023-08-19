@@ -5,6 +5,7 @@ const { startStandaloneServer } = require('@apollo/server/standalone')
 const { v1: uuid } = require('uuid');
 const Book = require('./models/Book');
 const Author = require('./models/Author');
+const { GraphQLError } = require('graphql');
 const MONGODB_URI = process.env.MONGODB_URI;
 
 mongoose.set('strictQuery', false);
@@ -174,11 +175,28 @@ const resolvers = {
           born: null
         });
 
-        await newAuthor.save();
+        try {
+          await newAuthor.save();
+        } catch (error) {
+          throw new GraphQLError(error.message, {
+            extensions: {
+              code: 'BAD_USER_INPUT'
+            }
+          });
+        }
+
         newBook.author = newAuthor;
       }
 
-      await newBook.save();
+      try {
+        await newBook.save();
+      } catch (error) {
+        throw new GraphQLError(error.message, {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+          }
+        });
+      }
 
       return newBook;
     },
