@@ -20,7 +20,9 @@ const Books = (props) => {
     return null
   }
 
-  const books = query.data.allBooks;
+  const books = filter !== 'all genres' 
+    ? query.data.allBooks.filter((b) => b.genres.includes(filter))
+    : query.data.allBooks;
 
   return (
     <div>
