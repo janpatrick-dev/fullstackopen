@@ -1,7 +1,19 @@
 import { useQuery } from "@apollo/client"
 import { ALL_BOOKS } from "../queries"
+import { useState } from "react";
+
+const filters = [
+  'refactoring',
+  'agile',
+  'patterns',
+  'design',
+  'crime',
+  'classic',
+  'all genres'
+];
 
 const Books = (props) => {
+  const [filter, setFilter] = useState('all genres');
   const query = useQuery(ALL_BOOKS);
 
   if (!props.show || query.loading) {
@@ -13,7 +25,6 @@ const Books = (props) => {
   return (
     <div>
       <h2>books</h2>
-
       <table>
         <tbody>
           <tr>
@@ -30,6 +41,9 @@ const Books = (props) => {
           ))}
         </tbody>
       </table>
+      {filters.map((f) => (
+        <button key={f} onClick={() => setFilter(f)}>{f}</button>
+      ))}
     </div>
   )
 }
