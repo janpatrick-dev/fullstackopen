@@ -12,11 +12,11 @@ const filters = [
   'all genres'
 ];
 
-const Books = (props) => {
+const Books = () => {
   const [filter, setFilter] = useState('all genres');
   const query = useQuery(ALL_BOOKS);
 
-  if (!props.show || query.loading) {
+  if (query.loading) {
     return null
   }
 

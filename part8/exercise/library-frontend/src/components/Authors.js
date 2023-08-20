@@ -1,11 +1,21 @@
 import { useQuery } from "@apollo/client"
-import { ALL_AUTHORS } from "../queries"
+import { ALL_AUTHORS, USER } from "../queries"
 import UpdateAuthor from "./UpdateAuthor";
+import { useEffect } from "react";
 
-const Authors = (props) => {
+const Authors = ({ setUser }) => {
+  const userQuery = useQuery(USER, {
+    fetchPolicy: 'no-cache'
+  });
   const query = useQuery(ALL_AUTHORS);
 
-  if (!props.show || query.loading) {
+  useEffect(() => {
+    if (userQuery.data && userQuery.data.me) {
+      setUser(userQuery.data.me);
+    }
+  }, [userQuery])
+
+  if (userQuery.loading || query.loading) {
     return null
   }
   

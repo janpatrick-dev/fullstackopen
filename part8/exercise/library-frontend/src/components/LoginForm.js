@@ -1,13 +1,24 @@
 import { useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { LOGIN } from "../queries";
+import { useNavigate } from "react-router-dom";
 
-const LoginForm = ({ show, setToken, setPage }) => {
+const LoginForm = ({ token, setToken }) => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [ login, result ] = useMutation(LOGIN);
 
-  const submit = (e) => {
+  useEffect(() => {
+    if (result.data) {
+      const tokenValue = result.data.login.value;
+      setToken(tokenValue);
+      localStorage.setItem('user-token', tokenValue);
+      navigate('/');
+    }
+  }, [result.data]);
+
+  const submit = async (e) => {
     e.preventDefault();
 
     login({ variables: { username, password } });
@@ -16,16 +27,7 @@ const LoginForm = ({ show, setToken, setPage }) => {
     setPassword('');
   }
 
-  useEffect(() => {
-    if (result.data) {
-      const token = result.data.login.value;
-      localStorage.setItem('user-token', token);
-      setToken(token);
-      setPage('authors');
-    }
-  }, [result.data]);
-
-  if (!show) {
+  if (token) {
     return null;
   }
 
