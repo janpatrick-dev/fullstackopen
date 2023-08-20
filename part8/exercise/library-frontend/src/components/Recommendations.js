@@ -3,7 +3,7 @@ import { ALL_BOOKS } from '../queries'
 
 const Recommendations = ({ user }) => {
   const booksQuery = useQuery(ALL_BOOKS, {
-    variables: { genre: user ? user.favoriteGenre : '' }
+    variables: user ? { genre: user.favoriteGenre } : null
   });
 
   if (!user || booksQuery.loading) {

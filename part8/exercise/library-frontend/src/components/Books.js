@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client"
 import { ALL_BOOKS } from "../queries"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const filters = [
   'refactoring',

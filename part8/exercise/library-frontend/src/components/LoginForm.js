@@ -1,13 +1,15 @@
 import { useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { LOGIN } from "../queries";
+import { ALL_AUTHORS, ALL_BOOKS, LOGIN } from "../queries";
 import { useNavigate } from "react-router-dom";
 
 const LoginForm = ({ token, setToken }) => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [ login, result ] = useMutation(LOGIN);
+  const [ login, result ] = useMutation(LOGIN, {
+    refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS }]
+  });
 
   useEffect(() => {
     if (result.data) {

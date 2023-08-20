@@ -7,7 +7,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('user-token');
-  console.log('TOKEN\n----------\n', token);
   return {
     headers: {
       ...headers,
