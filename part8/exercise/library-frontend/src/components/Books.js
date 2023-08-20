@@ -14,15 +14,15 @@ const filters = [
 
 const Books = () => {
   const [filter, setFilter] = useState('all genres');
-  const query = useQuery(ALL_BOOKS);
+  const query = useQuery(ALL_BOOKS, {
+    variables: { genre: filter !== 'all genres' ? filter : '' }
+  });
 
   if (query.loading) {
     return null
   }
 
-  const books = filter !== 'all genres' 
-    ? query.data.allBooks.filter((b) => b.genres.includes(filter))
-    : query.data.allBooks;
+  const books = query.data.allBooks;
 
   return (
     <div>
