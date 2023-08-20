@@ -6,8 +6,8 @@ import LoginForm from './components/LoginForm'
 import Recommendations from './components/Recommendations'
 import { Routes, Route } from 'react-router-dom';
 import UserActions from './components/UserActions'
-import { useQuery } from '@apollo/client'
-import { USER } from './queries'
+import { useQuery, useSubscription } from '@apollo/client'
+import { BOOK_ADDED, USER } from './queries'
 
 const App = () => {
   const [token, setToken] = useState(null);
@@ -26,6 +26,12 @@ const App = () => {
       setToken(tokenLocal);
     }
   }, []);
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      alert(data);
+    }
+  });
 
   return (
     <div>
